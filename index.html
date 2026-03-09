@@ -3,79 +3,124 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>AI Content</title>
+		<title>AI Content | University of Waterloo</title>
 		<style>
 			body {
-				font-family: system-ui, sans-serif;
-				max-width: 600px;
-				margin: 60px auto;
-				padding: 0 20px;
+				font-family: system-ui, -apple-system, sans-serif;
+				margin: 0;
+				padding: 0;
+				background: #fff;
+				color: #1a1a1a;
 			}
-			h1 {
-				margin-bottom: 24px;
+			.content {
+				max-width: 960px;
+				margin: 0 auto;
+				padding: 0 32px 60px;
+			}
+			header {
+				background: #000;
+				color: #fff;
+				padding: 24px 32px 20px;
+				margin-bottom: 32px;
+			}
+			header .inner {
+				max-width: 960px;
+				margin: 0 auto;
+			}
+			header h1 {
+				margin: 0;
+				font-size: 1.6rem;
+				font-weight: 700;
+				letter-spacing: -0.02em;
+			}
+			header h1 span {
+				color: #FFC72C;
+			}
+			header p {
+				margin: 6px 0 0;
+				font-size: 0.9rem;
+				color: #ccc;
+			}
+			h2 {
+				margin-top: 36px;
+				font-size: 1rem;
+				font-weight: 700;
+				color: #000;
+				text-transform: uppercase;
+				letter-spacing: 0.04em;
+				border-bottom: 3px solid #FFC72C;
+				padding-bottom: 6px;
+				margin-bottom: 12px;
 			}
 			ul {
 				list-style: none;
 				padding: 0;
 			}
 			li {
-				margin: 12px 0;
+				margin: 10px 0;
 			}
 			a {
-				color: #0366d6;
+				color: #000;
 				text-decoration: none;
-				font-size: 1.1rem;
+				font-size: 1.05rem;
+				border-bottom: 1px solid #FFC72C;
+				padding-bottom: 1px;
+				transition: color 0.15s;
 			}
 			a:hover {
-				text-decoration: underline;
-			}
-			h2 {
-				margin-top: 32px;
-				font-size: 1.1rem;
-				color: #333;
-				border-bottom: 1px solid #ddd;
-				padding-bottom: 6px;
+				color: #B37F00;
 			}
 			.prompts {
 				display: grid;
 				gap: 16px;
 			}
 			.prompt-card {
-				background: #f5f6f8;
+				background: #f9f8f5;
 				border-radius: 8px;
 				padding: 16px;
+				border-left: 4px solid #FFC72C;
 			}
 			.prompt-card h3 {
 				font-size: 0.95rem;
+				font-weight: 600;
 				margin-bottom: 8px;
+				color: #000;
 			}
 			.prompt-card pre {
 				background: #fff;
-				border: 1px solid #ddd;
+				border: 1px solid #e5e0d5;
 				border-radius: 6px;
 				padding: 12px;
 				white-space: pre-wrap;
-				font-size: 0.9rem;
+				font-size: 0.85rem;
 				margin: 0;
+				line-height: 1.5;
 			}
 			.copy-btn {
 				margin-top: 8px;
-				padding: 5px 12px;
+				padding: 5px 14px;
 				font-size: 0.8rem;
 				cursor: pointer;
-				background: #fff;
-				border: 1px solid #ccc;
+				background: #000;
+				border: none;
 				border-radius: 5px;
-				color: #333;
+				color: #FFC72C;
+				font-weight: 600;
 				transition: background 0.15s;
 			}
 			.copy-btn:hover {
-				background: #e8e8e8;
+				background: #222;
 			}
 		</style>
 	</head>
 	<body>
-		<h1>AI Content</h1>
+		<header>
+			<div class="inner">
+				<h1><span>AI</span> Content</h1>
+				<p>University of Waterloo</p>
+			</div>
+		</header>
+		<div class="content">
 
 		<h2>Interactive Demos</h2>
 		<ul>
@@ -135,6 +180,81 @@ When a user shares a request they plan to send to another AI model:
 Briefly explain your reasoning. Keep replies short, clear, and encouraging.
  </pre>
 			</div>
+			<div class="prompt-card">
+				<h3>Meeting notes transformer</h3>
+				<pre>You are a Meeting Notes Assistant for a university department.
+
+I will paste raw, unstructured meeting notes. Your job:
+
+1. Summarise the meeting in 3–5 bullet points.
+2. Extract every action item as a checklist with the responsible person and deadline (if mentioned).
+3. Flag any decisions that were made.
+4. Note any unresolved questions that need follow-up.
+
+Format the output with clear headings: Summary, Action Items, Decisions, Open Questions.
+Keep language professional and concise.</pre>
+			</div>
+			<div class="prompt-card">
+				<h3>Policy plain-language rewriter</h3>
+				<pre>You are a Plain Language Editor at a university.
+
+I will give you a section of university policy or procedure text. Your job:
+
+1. Rewrite it in plain language at a Grade 8 reading level.
+2. Keep all factual content and requirements — do not remove obligations.
+3. Break long paragraphs into short sentences and bullet lists.
+4. Replace jargon with everyday words. If a technical term must stay, add a brief parenthetical definition.
+5. At the end, list any terms you were unsure about so a human can verify.
+
+Tone: clear, helpful, respectful. Never add information that isn't in the original.</pre>
+			</div>
+			<div class="prompt-card">
+				<h3>Rubric builder</h3>
+				<pre>You are a Curriculum Design Assistant at a university.
+
+Help me create an assessment rubric.
+
+I will provide:
+- The assignment description
+- The learning outcomes it maps to
+- The number of performance levels I want (e.g. 4)
+
+You will:
+1. Propose criteria based on the learning outcomes.
+2. Write clear, observable descriptors for each performance level (e.g. Excellent / Proficient / Developing / Beginning).
+3. Suggest a point or weight distribution.
+4. Format as a Markdown table I can paste into a document.
+
+Ask clarifying questions if any input is missing before generating the rubric.</pre>
+			</div>
+			<div class="prompt-card">
+				<h3>Data analysis helper</h3>
+				<pre>You are a Data Analysis Coach for university staff.
+
+I will describe a dataset or paste a sample. Your job:
+
+1. Confirm what the data represents and identify the key columns/fields.
+2. Suggest 3–5 analyses or visualisations that would answer common questions about this data.
+3. For each suggestion, provide the exact steps or formula (Excel, Google Sheets, or Python — ask which I prefer).
+4. Warn me about common pitfalls (e.g. missing values, misleading averages, small sample sizes).
+
+Keep explanations beginner-friendly. Use numbered steps so I can follow along.</pre>
+			</div>
+			<div class="prompt-card">
+				<h3>Communication tone adjuster</h3>
+				<pre>You are a University Communications Editor.
+
+I will paste a draft message (email, announcement, or web copy). Tell me:
+
+1. Current tone (e.g. formal, casual, urgent, passive).
+2. Rewrite it in the tone I request (I will specify: formal, friendly, empathetic, concise, or persuasive).
+3. Highlight the key changes you made and why.
+
+Rules:
+- Preserve all factual content.
+- Keep it under the original word count unless I say otherwise.
+- Flag any content that could be misinterpreted or is unclear.</pre>
+			</div>
 		</div>
 		<script>
 			document.querySelectorAll('.prompt-card').forEach(card => {
@@ -151,5 +271,6 @@ Briefly explain your reasoning. Keep replies short, clear, and encouraging.
 				card.appendChild(btn);
 			});
 		</script>
+		</div>
 	</body>
 </html>
