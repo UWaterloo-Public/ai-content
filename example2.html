@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generative AI — Interactive Learning Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0d11;
+  --surface: #17161c;
+  --surface2: #201f28;
+  --surface3: #2a2933;
+  --gold: #F5C322;
+  --gold2: #e6ae0f;
+  --gold-dim: rgba(245,195,34,0.12);
+  --text: #f0ece0;
+  --text-muted: #8a8490;
+  --text-dim: #5a5760;
+  --border: #2e2c38;
+  --green: #4ade80;
+  --red: #f87171;
+  --blue: #60a5fa;
+  --purple: #c084fc;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  min-height: 100vh;
+}
+
+/* ─── NAV ─── */
+#topnav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(14,13,17,0.94);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+  display: flex; align-items: center; gap: 4px;
+  height: 54px; overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+#topnav::-webkit-scrollbar { display: none; }
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800; font-size: 13px;
+  color: var(--gold); white-space: nowrap;
+  margin-right: 12px; letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.nav-btn {
+  flex-shrink: 0;
+  background: transparent; border: 1px solid var(--border);
+  color: var(--text-muted); cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500;
+  padding: 5px 13px; border-radius: 20px;
+  transition: var(--transition); white-space: nowrap;
+}
+.nav-btn:hover { border-color: var(--gold); color: var(--gold); }
+.nav-btn.active {
+  background: var(--gold); border-color: var(--gold);
+  color: #0e0d11; font-weight: 700;
+}
+.nav-hint {
+  margin-left: auto; flex-shrink: 0;
+  color: var(--text-dim); font-size: 11px;
+  display: flex; align-items: center; gap: 4px;
+  padding-left: 12px;
+}
+
+/* ─── PAGES ─── */
+#pages { padding-top: 54px; }
+.page { display: none; min-height: calc(100vh - 54px); padding: 48px 24px 80px; }
+.page.active { display: block; animation: fadeUp 0.35s ease both; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.container { max-width: 900px; margin: 0 auto; }
+.wide-container { max-width: 1100px; margin: 0 auto; }
+
+/* ─── TYPOGRAPHY ─── */
+.section-eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 10px;
+}
+h1, h2, h3 { font-family: 'Syne', sans-serif; }
+.page-title {
+  font-size: clamp(32px, 6vw, 56px); font-weight: 800;
+  line-height: 1.1; color: var(--text);
+  margin-bottom: 18px;
+}
+.page-title span { color: var(--gold); }
+.page-subtitle {
+  font-size: 17px; color: var(--text-muted);
+  max-width: 600px; margin-bottom: 48px; line-height: 1.7;
+}
+.section-title {
+  font-size: 24px; font-weight: 700; margin-bottom: 20px;
+}
+.section-body {
+  color: var(--text-muted); line-height: 1.75; margin-bottom: 24px;
+}
+
+/* ─── CARDS ─── */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 24px;
+}
+.card-grid { display: grid; gap: 16px; }
+.card-grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.card-grid-3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.card-grid-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+.card-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 8px;
+}
+.card-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.card-body { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+
+/* ─── STAT CARDS ─── */
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  position: relative; overflow: hidden;
+}
+.stat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--gold);
+}
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 36px; font-weight: 800;
+  color: var(--gold); line-height: 1;
+  margin-bottom: 6px;
+}
+.stat-label { font-size: 13px; color: var(--text-muted); }
+
+/* ─── GOLD DIVIDER ─── */
+.gold-divider {
+  width: 40px; height: 3px; background: var(--gold);
+  border-radius: 2px; margin: 24px 0;
+}
+.divider { height: 1px; background: var(--border); margin: 36px 0; }
+
+/* ─── BADGES ─── */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 600; padding: 3px 9px;
+  border-radius: 20px; letter-spacing: 0.04em;
+}
+.badge-gold { background: var(--gold-dim); color: var(--gold); border: 1px solid rgba(245,195,34,0.25); }
+.badge-green { background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.25); }
+.badge-red { background: rgba(248,113,113,0.1); color: var(--red); border: 1px solid rgba(248,113,113,0.25); }
+.badge-blue { background: rgba(96,165,250,0.1); color: var(--blue); border: 1px solid rgba(96,165,250,0.25); }
+.badge-purple { background: rgba(192,132,252,0.1); color: var(--purple); border: 1px solid rgba(192,132,252,0.25); }
+
+/* ─── ACCORDION ─── */
+.accordion-item {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; margin-bottom: 8px;
+  transition: border-color var(--transition);
+}
+.accordion-item.open { border-color: rgba(245,195,34,0.4); }
+.accordion-trigger {
+  width: 100%; display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 20px; background: var(--surface);
+  cursor: pointer; border: none; color: var(--text);
+  font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
+  text-align: left; transition: background var(--transition);
+}
+.accordion-trigger:hover { background: var(--surface2); }
+.accordion-icon {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--surface3); color: var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0; transition: transform var(--transition);
+  font-weight: 300;
+}
+.accordion-item.open .accordion-icon { transform: rotate(45deg); }
+.accordion-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--surface);
+}
+.accordion-body-inner { padding: 0 20px 20px; border-top: 1px solid var(--border); padding-top: 16px; }
+.accordion-item.open .accordion-body { max-height: 800px; }
+
+/* ─── TABS ─── */
+.tab-bar {
+  display: flex; gap: 4px; background: var(--surface);
+  padding: 4px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.tab-btn {
+  flex: 1; padding: 8px 14px; border: none; border-radius: 6px;
+  background: transparent; color: var(--text-muted);
+  cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px;
+  font-weight: 500; transition: var(--transition); white-space: nowrap;
+  min-width: 80px;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { background: var(--gold); color: #0e0d11; font-weight: 700; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadeUp 0.25s ease both; }
+
+/* ─── PROMPT BOX ─── */
+.prompt-box {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px 20px;
+  font-size: 14px; line-height: 1.7;
+}
+.prompt-box.good { border-color: rgba(74,222,128,0.35); }
+.prompt-box.bad  { border-color: rgba(248,113,113,0.25); }
+.prompt-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; margin-bottom: 10px;
+}
+.prompt-label.good { color: var(--green); }
+.prompt-label.bad  { color: var(--red); }
+.prompt-label.meh  { color: #facc15; }
+.prompt-text { color: var(--text-muted); font-style: italic; }
+.prompt-text strong { color: var(--text); font-style: normal; }
+
+/* ─── HIERARCHY VISUAL ─── */
+.hierarchy {
+  display: flex; flex-direction: column; gap: 6px;
+  margin: 24px 0;
+}
+.h-layer {
+  border-radius: 8px; padding: 10px 18px;
+  font-size: 13px; font-weight: 600;
+  display: flex; align-items: center; gap: 10px;
+}
+.h-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* ─── TIMELINE ─── */
+.timeline { position: relative; padding-left: 28px; }
+.timeline::before {
+  content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px;
+  width: 2px; background: var(--border);
+}
+.tl-item { position: relative; margin-bottom: 28px; }
+.tl-dot {
+  position: absolute; left: -28px; top: 4px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--surface2); border: 2px solid var(--gold);
+  flex-shrink: 0;
+}
+.tl-dot.active { background: var(--gold); }
+.tl-year { font-size: 11px; font-weight: 700; color: var(--gold); margin-bottom: 3px; letter-spacing: 0.08em; }
+.tl-text { font-size: 14px; color: var(--text-muted); }
+
+/* ─── TABLE ─── */
+.styled-table {
+  width: 100%; border-collapse: collapse; font-size: 14px;
+}
+.styled-table th {
+  background: var(--surface2); color: var(--gold);
+  font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 10px 14px; text-align: left;
+}
+.styled-table td {
+  padding: 11px 14px; border-top: 1px solid var(--border);
+  color: var(--text-muted); vertical-align: top;
+}
+.styled-table tr:hover td { background: var(--surface); }
+
+/* ─── RISK CARDS ─── */
+.risk-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px 20px;
+  cursor: pointer; transition: var(--transition);
+  position: relative;
+}
+.risk-card:hover { border-color: var(--gold); }
+.risk-card.open { border-color: rgba(245,195,34,0.5); background: var(--surface2); }
+.risk-answer {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.3s ease;
+  font-size: 13px; color: var(--green); line-height: 1.65;
+}
+.risk-card.open .risk-answer { max-height: 200px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+.risk-title { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+.risk-desc { font-size: 13px; color: var(--text-muted); }
+
+/* ─── POLICY GRID ─── */
+.policy-col {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px;
+}
+.policy-col.public  { border-top: 3px solid var(--green); }
+.policy-col.restricted { border-top: 3px solid #facc15; }
+.policy-col.highly  { border-top: 3px solid var(--red); }
+.policy-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+.policy-item { font-size: 13px; color: var(--text-muted); margin-bottom: 6px; padding-left: 14px; position: relative; line-height: 1.5; }
+.policy-item::before { content: '—'; position: absolute; left: 0; color: var(--text-dim); }
+
+/* ─── STEP CARDS ─── */
+.step-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 24px;
+  position: relative;
+}
+.step-num {
+  font-family: 'Syne', sans-serif; font-size: 48px; font-weight: 800;
+  color: var(--gold-dim); position: absolute; top: 12px; right: 18px;
+  line-height: 1;
+  -webkit-text-stroke: 1px rgba(245,195,34,0.2);
+  color: transparent;
+}
+
+/* ─── PROGRESS BARS ─── */
+.progress-wrap { margin-bottom: 12px; }
+.progress-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; }
+.progress-label span:first-child { color: var(--text-muted); }
+.progress-label span:last-child { color: var(--gold); font-weight: 600; }
+.progress-bar-bg { height: 6px; background: var(--surface3); border-radius: 3px; overflow: hidden; }
+.progress-bar-fill {
+  height: 100%; border-radius: 3px;
+  background: linear-gradient(90deg, var(--gold2), var(--gold));
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─── TOOL CARD ─── */
+.tool-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px;
+  transition: var(--transition);
+}
+.tool-card:hover { border-color: rgba(245,195,34,0.4); transform: translateY(-2px); }
+.tool-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: var(--surface2); display: flex; align-items: center;
+  justify-content: center; font-size: 20px; margin-bottom: 14px;
+}
+.tool-name { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+.tool-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.6; }
+
+/* ─── HOME HERO ─── */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px; margin-top: 40px;
+}
+@media (max-width: 640px) { .hero-grid { grid-template-columns: 1fr; } }
+
+.hero-stat {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px;
+  position: relative; overflow: hidden;
+}
+.hero-stat::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: var(--gold);
+}
+.hero-stat-num {
+  font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800;
+  color: var(--gold); line-height: 1; margin-bottom: 6px;
+}
+.hero-stat-label { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+
+/* ─── CALLOUT ─── */
+.callout {
+  background: var(--gold-dim); border: 1px solid rgba(245,195,34,0.25);
+  border-radius: var(--radius); padding: 18px 20px;
+  font-size: 14px; color: var(--text); line-height: 1.7;
+}
+.callout strong { color: var(--gold); }
+
+/* ─── UL STYLED ─── */
+.styled-ul { list-style: none; padding: 0; }
+.styled-ul li {
+  position: relative; padding-left: 18px;
+  margin-bottom: 8px; font-size: 14px; color: var(--text-muted); line-height: 1.65;
+}
+.styled-ul li::before { content: '→'; position: absolute; left: 0; color: var(--gold); font-size: 12px; top: 2px; }
+.styled-ul li strong { color: var(--text); }
+
+/* ─── BENCHMARK BAR ─── */
+.bench-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.bench-name { font-size: 13px; min-width: 160px; color: var(--text-muted); flex-shrink: 0; }
+.bench-bar-wrap { flex: 1; height: 20px; background: var(--surface3); border-radius: 4px; overflow: hidden; position: relative; }
+.bench-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #0e0d11; transition: width 1.2s cubic-bezier(0.4,0,0.2,1); }
+.bench-pct { font-size: 12px; font-weight: 700; color: var(--gold); min-width: 40px; text-align: right; flex-shrink: 0; }
+
+/* ─── FOOTER ─── */
+.page-footer {
+  margin-top: 60px; padding-top: 32px; border-top: 1px solid var(--border);
+  display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between;
+  align-items: center;
+}
+.footer-credit { font-size: 12px; color: var(--text-dim); }
+.footer-links { display: flex; flex-wrap: wrap; gap: 8px; }
+.footer-link {
+  font-size: 12px; color: var(--text-muted); text-decoration: none;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 6px; padding: 4px 10px;
+  transition: var(--transition);
+}
+.footer-link:hover { border-color: var(--gold); color: var(--gold); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 600px) {
+  .page { padding: 32px 16px 60px; }
+  .page-title { font-size: 28px; }
+  .hero-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="topnav">
+  <span class="nav-logo">GenAI</span>
+  <button class="nav-btn active" data-page="home">Home</button>
+  <button class="nav-btn" data-page="how">How It Works</button>
+  <button class="nav-btn" data-page="capabilities">Capabilities</button>
+  <button class="nav-btn" data-page="usecases">Use Cases</button>
+  <button class="nav-btn" data-page="prompting">Prompting</button>
+  <button class="nav-btn" data-page="tools">Tools</button>
+  <button class="nav-btn" data-page="adoption">Adoption</button>
+  <button class="nav-btn" data-page="agents">Agents</button>
+  <button class="nav-btn" data-page="challenges">Challenges</button>
+  <span class="nav-hint">← → keys</span>
+</nav>
+
+<div id="pages">
+
+<!-- ══════════════════════════════════════════
+     PAGE 0: HOME
+══════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+<div class="container">
+  <div class="section-eyebrow">University of Waterloo · OVPRI</div>
+  <h1 class="page-title">Generative AI<br><span>for Everyone</span></h1>
+  <p class="page-subtitle">An interactive guide to understanding, using, and thinking critically about Generative AI. Based on training materials by <strong style="color:var(--text)">Pavol Chvala</strong>, Director, AI Innovation &amp; Systems Development.</p>
+
+  <div class="hero-grid">
+    <div class="hero-stat">
+      <div class="hero-stat-num">12 hrs</div>
+      <div class="hero-stat-label">Today's agentic task horizon (50% success) — Claude Opus 4.6</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">4–7mo</div>
+      <div class="hero-stat-label">Doubling time for agentic task capability (METR, 2026)</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">9–900×</div>
+      <div class="hero-stat-label">Annual reduction in LLM inference cost per token</div>
+    </div>
+  </div>
+
+  <div class="gold-divider" style="margin-top:40px"></div>
+
+  <div class="card-grid card-grid-3" style="margin-top:0">
+    <div class="card" style="cursor:pointer" onclick="goTo('how')">
+      <div class="card-label">Module 1–2</div>
+      <div class="card-title">How It Works</div>
+      <div class="card-body">AI hierarchy, training, inference, model growth and cost trends.</div>
+    </div>
+    <div class="card" style="cursor:pointer" onclick="goTo('capabilities')">
+      <div class="card-label">Module 3</div>
+      <div class="card-title">Capabilities</div>
+      <div class="card-body">Agentic benchmarks, industry comparisons, and what's coming next.</div>
+    </div>
+    <div class="card" style="cursor:pointer" onclick="goTo('usecases')">
+      <div class="card-label">Module 4</div>
+      <div class="card-title">Use Cases</div>
+      <div class="card-body">Create, Augment, and Collaborate — with live prompting examples.</div>
+    </div>
+    <div class="card" style="cursor:pointer" onclick="goTo('prompting')">
+      <div class="card-label">Module 5</div>
+      <div class="card-title">Prompting Techniques</div>
+      <div class="card-body">Zero-shot, few-shot, role prompting, step-back, reusable prompts and more.</div>
+    </div>
+    <div class="card" style="cursor:pointer" onclick="goTo('tools')">
+      <div class="card-label">Module 6</div>
+      <div class="card-title">Tools &amp; Selection</div>
+      <div class="card-body">Copilot, ChatGPT, Gemini, Claude, Ollama — choosing the right one.</div>
+    </div>
+    <div class="card" style="cursor:pointer" onclick="goTo('adoption')">
+      <div class="card-label">Module 7</div>
+      <div class="card-title">Adoption Journey</div>
+      <div class="card-body">Learn → Iterate → Standardize. The path to an AI-enabled team.</div>
+    </div>
+    <div class="card" style="cursor:pointer" onclick="goTo('agents')">
+      <div class="card-label">Module 8</div>
+      <div class="card-title">Agents &amp; Automation</div>
+      <div class="card-body">How agents work, real examples, risk areas and responsible principles.</div>
+    </div>
+    <div class="card" style="cursor:pointer" onclick="goTo('challenges')">
+      <div class="card-label">Module 9</div>
+      <div class="card-title">Challenges</div>
+      <div class="card-body">Data awareness, Policy 46, bias, hallucinations, sustainability.</div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:40px">
+    <strong>Key insight:</strong> Sharing use-cases amongst colleagues is the fastest way to gain efficiencies using GenAI tools. The technology is accelerating — nobody is an expert yet, and that's okay.
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 1: HOW IT WORKS
+══════════════════════════════════════════ -->
+<div class="page" id="page-how">
+<div class="container">
+  <div class="section-eyebrow">Module 1–2</div>
+  <h1 class="page-title">How It <span>Works</span></h1>
+  <p class="page-subtitle">Understanding the AI landscape — from foundational concepts to how models generate content.</p>
+
+  <h2 class="section-title">The AI Hierarchy</h2>
+  <p class="section-body">Generative AI sits inside a nested set of technologies. It's a type of AI capable of generating original content — commonly known as Gen AI, LLM, GPT, or just "the model."</p>
+
+  <div class="hierarchy">
+    <div class="h-layer" style="background:rgba(245,195,34,0.06);border:1px solid rgba(245,195,34,0.15);padding-left:18px">
+      <div class="h-dot" style="background:#a3a3a3"></div>
+      <span style="font-size:12px;color:var(--text-dim)">Artificial Intelligence (AI) · Narrow AI · AGI</span>
+    </div>
+    <div class="h-layer" style="background:rgba(245,195,34,0.08);border:1px solid rgba(245,195,34,0.18);margin:0 16px">
+      <div class="h-dot" style="background:#78716c"></div>
+      <span style="font-size:12px;color:var(--text-muted)">Machine Learning</span>
+    </div>
+    <div class="h-layer" style="background:rgba(245,195,34,0.11);border:1px solid rgba(245,195,34,0.22);margin:0 32px">
+      <div class="h-dot" style="background:#a3a3a3"></div>
+      <span style="font-size:13px;color:var(--text-muted)">Deep Learning</span>
+    </div>
+    <div class="h-layer" style="background:rgba(245,195,34,0.14);border:1px solid rgba(245,195,34,0.28);margin:0 48px">
+      <div class="h-dot" style="background:var(--gold2)"></div>
+      <span style="font-size:13px;color:var(--text)"><strong>Generative AI</strong> · Diffusion · GANs</span>
+    </div>
+    <div class="h-layer" style="background:rgba(245,195,34,0.18);border:1px solid rgba(245,195,34,0.35);margin:0 64px">
+      <div class="h-dot" style="background:var(--gold)"></div>
+      <span style="font-size:14px;color:var(--text)"><strong>Large Language Models (LLMs)</strong> · BERT · GPT series</span>
+    </div>
+    <div class="h-layer" style="background:rgba(245,195,34,0.22);border:1px solid rgba(245,195,34,0.45);margin:0 80px">
+      <div class="h-dot" style="background:var(--gold)"></div>
+      <span style="font-size:14px;color:var(--gold);font-weight:700">ChatGPT · Claude · Gemini · Copilot</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h2 class="section-title">How Does It Generate Content?</h2>
+  <div class="card-grid card-grid-3" style="margin-top:0">
+    <div class="step-card">
+      <span class="step-num">01</span>
+      <div class="badge badge-gold" style="margin-bottom:12px">Training</div>
+      <div class="card-title" style="font-size:16px">Pattern Recognition</div>
+      <div class="card-body">Machine learning identifies patterns in vast data (text, images, video, music). The result is a <em>model</em>.<br><br>
+        <span style="color:var(--text-dim);font-size:13px;font-style:italic">"The cat sat on the ___" → "mat"<br>"The cat ___ on the mat" → "sat"<br>…do this trillions of times…</span>
+      </div>
+    </div>
+    <div class="step-card">
+      <span class="step-num">02</span>
+      <div class="badge badge-blue" style="margin-bottom:12px">Preference Tuning</div>
+      <div class="card-title" style="font-size:16px">Alignment</div>
+      <div class="card-body">The raw model is tweaked so that its outputs align with human preferences — making it helpful, harmless, and honest rather than just statistically likely.</div>
+    </div>
+    <div class="step-card">
+      <span class="step-num">03</span>
+      <div class="badge badge-green" style="margin-bottom:12px">Generation</div>
+      <div class="card-title" style="font-size:16px">Inference</div>
+      <div class="card-body">"Hey <em>model</em>, I have the following data — what comes next?"<br><br>Every response is the model predicting the most probable continuation of your input.</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h2 class="section-title">Model Growth &amp; Cost Trends</h2>
+  <div class="card-grid card-grid-4">
+    <div class="stat-card">
+      <div class="stat-num">4.5×</div>
+      <div class="stat-label">Annual growth in training compute during the Deep Learning era (Epoch AI)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">9–900×</div>
+      <div class="stat-label">Annual reduction in LLM inference prices, depending on task type</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">40×</div>
+      <div class="stat-label">Per-year cost reduction for mid-range capability models</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">2010</div>
+      <div class="stat-label">Start of the Deep Learning era — compute growth accelerated dramatically</div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:32px">
+    <strong>Bottom line:</strong> Models are getting dramatically more capable while simultaneously getting far cheaper to use. This combination is what makes now such a pivotal moment for AI adoption.
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-credit">Source: Epoch AI · epoch.ai/data/ai-models</span>
+    <div class="footer-links">
+      <a class="footer-link" href="https://epoch.ai/" target="_blank">epoch.ai</a>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 2: CAPABILITIES
+══════════════════════════════════════════ -->
+<div class="page" id="page-capabilities">
+<div class="container">
+  <div class="section-eyebrow">Module 3</div>
+  <h1 class="page-title">AI <span>Capabilities</span></h1>
+  <p class="page-subtitle">How capable are today's AI systems — and how fast are things moving?</p>
+
+  <h2 class="section-title">Agentic Task Horizon (50% Success)</h2>
+  <p class="section-body" style="margin-bottom:20px">How long a software task can an LLM complete with 50% success? This measure has been doubling every 4–7 months.</p>
+
+  <div class="card-grid card-grid-4" style="margin-bottom:32px">
+    <div class="stat-card">
+      <div class="stat-num">12 hrs</div>
+      <div class="stat-label"><strong>Today</strong> — Claude Opus 4.6 (METR, Mar 2026)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">2026</div>
+      <div class="stat-label">Projected: 2-hour tasks routinely</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">2027</div>
+      <div class="stat-label">Projected: 1 full work day of autonomous tasks</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">2029</div>
+      <div class="stat-label">Projected: 1 full work month of autonomous tasks</div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-bottom:32px">
+    <strong>4–7 month doubling time.</strong> Today's best model (Claude Opus 4.6) can complete a 12-hour software task with 50% reliability. At 80% reliability the horizon is currently ~1 hour 10 minutes. Capabilities are growing exponentially.
+  </div>
+
+  <h2 class="section-title">Agentic Task Horizon — Timeline</h2>
+  <div class="timeline" style="margin-bottom:32px">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">2020 — GPT-2 / GPT-3</div>
+      <div class="tl-text">Task horizon: ~4 seconds. Could answer simple questions reliably.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">2022 — GPT-3.5</div>
+      <div class="tl-text">Task horizon: ~36 seconds. Could count words, simple lookups.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">2023 — GPT-4</div>
+      <div class="tl-text">Task horizon: ~6 minutes. Could fix bugs in small Python libraries.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">2024 — o1-preview / GPT-4o</div>
+      <div class="tl-text">Task horizon: ~1 hour. Could implement a simple web server, find facts on the web.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot active"></div>
+      <div class="tl-year">2025 — o3 / GPT-5 / Claude Opus 4.5</div>
+      <div class="tl-text">Task horizon: ~5 hours. Could train adversarially robust image models.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot active"></div>
+      <div class="tl-year">Today (Mar 2026) — Claude Opus 4.6 / GPT-5.2</div>
+      <div class="tl-text">Task horizon: <strong style="color:var(--gold)">12 hours</strong>. Can implement complex protocols from multiple RFCs.</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h2 class="section-title">AI Agent vs. Industry Professional</h2>
+  <p class="section-body" style="margin-bottom:20px">OpenAI's GDP-Val benchmark measures how often AI agents outperform human industry professionals on work tasks. The dashed line represents parity (50%).</p>
+
+  <div id="bench-container" class="card" style="padding:24px">
+    <div style="margin-bottom:20px">
+      <div class="bench-row">
+        <span class="bench-name" style="color:var(--text)">GPT-5.4</span>
+        <div class="bench-bar-wrap">
+          <div class="bench-bar" style="width:0%" data-width="83%" id="b1" style="background:linear-gradient(90deg,#3b82f6,#60a5fa)">83%</div>
+        </div>
+        <span class="bench-pct">83%</span>
+      </div>
+      <div class="bench-row">
+        <span class="bench-name" style="color:var(--gold)">Claude Opus 4.6</span>
+        <div class="bench-bar-wrap">
+          <div class="bench-bar" id="b2" data-width="78%" style="width:0%;background:linear-gradient(90deg,#d97706,#F5C322)">78%</div>
+        </div>
+        <span class="bench-pct" style="color:var(--gold)">78%</span>
+      </div>
+      <div class="bench-row">
+        <span class="bench-name">GPT-5.2 (wins+ties)</span>
+        <div class="bench-bar-wrap">
+          <div class="bench-bar" id="b3" data-width="71%" style="width:0%;background:linear-gradient(90deg,#1d4ed8,#60a5fa)">71%</div>
+        </div>
+        <span class="bench-pct">71%</span>
+      </div>
+      <div class="bench-row">
+        <span class="bench-name">Claude Opus 4.5</span>
+        <div class="bench-bar-wrap">
+          <div class="bench-bar" id="b4" data-width="60%" style="width:0%;background:linear-gradient(90deg,#92400e,#d97706)">60%</div>
+        </div>
+        <span class="bench-pct">60%</span>
+      </div>
+      <div class="bench-row">
+        <span class="bench-name">Gemini 3 Pro</span>
+        <div class="bench-bar-wrap">
+          <div class="bench-bar" id="b5" data-width="54%" style="width:0%;background:linear-gradient(90deg,#065f46,#34d399)">54%</div>
+        </div>
+        <span class="bench-pct">54%</span>
+      </div>
+      <div class="bench-row">
+        <span class="bench-name">Claude Sonnet 4.5</span>
+        <div class="bench-bar-wrap">
+          <div class="bench-bar" id="b6" data-width="50%" style="width:0%;background:linear-gradient(90deg,#92400e,#d97706)">50%</div>
+        </div>
+        <span class="bench-pct">50%</span>
+      </div>
+      <div class="bench-row">
+        <span class="bench-name">GPT-4o</span>
+        <div class="bench-bar-wrap">
+          <div class="bench-bar" id="b7" data-width="12%" style="width:0%;background:linear-gradient(90deg,#1e3a8a,#3b82f6)">12%</div>
+        </div>
+        <span class="bench-pct">12%</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;font-size:12px;color:var(--text-dim);border-top:1px solid var(--border);padding-top:12px">
+      <span>■ Wins only &nbsp;□ Wins + Ties</span>
+      <span style="margin-left:auto">Source: evals.openai.com/gdpval · Dec 2025</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h2 class="section-title">What Else Can It Do?</h2>
+  <div class="card-grid card-grid-3">
+    <div class="card">
+      <div class="badge badge-gold" style="margin-bottom:12px">March 2025</div>
+      <div class="card-title">Google Gemini Robotics</div>
+      <div class="card-body">Physical robots powered by multimodal AI — sorting items, following verbal instructions, performing delicate manipulation tasks in unstructured environments.</div>
+    </div>
+    <div class="card">
+      <div class="badge badge-gold" style="margin-bottom:12px">May 2025</div>
+      <div class="card-title">Google Veo 3</div>
+      <div class="card-body">AI video generation with cinematic quality — photorealistic scenes, consistent characters, and natural motion from a text description alone. <a href="https://deepmind.google/models/veo/" target="_blank" style="color:var(--gold)">deepmind.google/models/veo</a></div>
+    </div>
+    <div class="card">
+      <div class="badge badge-gold" style="margin-bottom:12px">January 2026</div>
+      <div class="card-title">Google Project Genie</div>
+      <div class="card-body">Interactive world generation — AI creates playable, interactive environments from images or descriptions. Games and simulations without a developer. <a href="https://deepmind.google/models/genie/" target="_blank" style="color:var(--gold)">deepmind.google/models/genie</a></div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:32px">
+    <strong>Application of AI today:</strong> Knowledgebase assistants · Complex reasoners · Deep research · Agents acting on your behalf · Medical imaging · Credit risk assessment · Legal research automation · Adaptive learning platforms · Student support agents · Personalized tutors · Course design assistants
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-credit">Sources: METR · metr.org/blog/2025-03-19 · OpenAI GDP-Val · evals.openai.com/gdpval</span>
+    <div class="footer-links">
+      <a class="footer-link" href="https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks" target="_blank">METR Report</a>
+      <a class="footer-link" href="https://evals.openai.com/gdpval/leaderboard" target="_blank">GDP-Val</a>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 3: USE CASES
+══════════════════════════════════════════ -->
+<div class="page" id="page-usecases">
+<div class="container">
+  <div class="section-eyebrow">Module 4</div>
+  <h1 class="page-title">Use <span>Cases</span></h1>
+  <p class="page-subtitle">The hardest part of AI adoption is identifying the right use cases. There are three core patterns.</p>
+
+  <div class="card-grid card-grid-3" style="margin-bottom:40px">
+    <div class="card" style="border-top:3px solid var(--gold)">
+      <div class="card-label">Pattern 1</div>
+      <div class="card-title">Create ✨</div>
+      <div class="card-body">Compose net-new content from scratch. Tell me a joke · draft an email · explain how AI works · generate an image · write a song.</div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--blue)">
+      <div class="card-label">Pattern 2</div>
+      <div class="card-title">Augment 🔧</div>
+      <div class="card-body">Improve or ground existing content using your own sources. Summarize a transcript · check grammar/tone · highlight anomalies in data · review an email.</div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--green)">
+      <div class="card-label">Pattern 3</div>
+      <div class="card-title">Collaborate 🤝</div>
+      <div class="card-body">Co-think to brainstorm, compare options, and decide. Draft a business case · analyze sales data · write executive summaries · explore trade-offs.</div>
+    </div>
+  </div>
+
+  <h2 class="section-title">Prompting Example: Welcome Email</h2>
+  <p class="section-body">See how the quality of a prompt transforms the output — starting with too little context, then with more specifics, then using augmentation.</p>
+
+  <div class="tab-bar" id="prompt-tabs">
+    <button class="tab-btn active" data-tab="v1">😐 V1 — Too Vague</button>
+    <button class="tab-btn" data-tab="v2">🤔 V2 — Better Context</button>
+    <button class="tab-btn" data-tab="v3">🤩 V3 — Augment Your Draft</button>
+  </div>
+
+  <div id="tab-v1" class="tab-panel active">
+    <div class="prompt-box bad" style="margin-bottom:14px">
+      <div class="prompt-label bad">Your Prompt</div>
+      <div class="prompt-text">Write me an email welcoming a new hire</div>
+    </div>
+    <div class="prompt-box" style="border-color:var(--border)">
+      <div class="prompt-label meh">AI Output — Generic &amp; Too Long</div>
+      <div class="prompt-text">Subject: Welcome to Our Team!<br><br>Dear [New Hire's Name], I hope this email finds you well. On behalf of the entire team, I want to extend a warm welcome to you as our newest team member…<br><br><span style="color:var(--text-dim)">[Full of placeholder text, generic advice, far too verbose. Not useful without significant editing.]</span></div>
+    </div>
+  </div>
+
+  <div id="tab-v2" class="tab-panel">
+    <div class="prompt-box bad" style="margin-bottom:14px;border-color:rgba(250,204,21,0.3)">
+      <div class="prompt-label meh">Your Prompt (Better)</div>
+      <div class="prompt-text">I'm the hiring manager for a software developer position and I've selected a candidate whom I've already interviewed. Please write me a concise welcome email for Cathy, this new hire. The start date is June 1st and she will be working in EC2.</div>
+    </div>
+    <div class="prompt-box" style="border-color:rgba(250,204,21,0.3)">
+      <div class="prompt-label meh">AI Output — Better But Still Generic</div>
+      <div class="prompt-text">Subject: Welcome to Our Team, Cathy!<br><br>Dear Cathy, I am thrilled to welcome you to our team as a software developer! Your start date is June 1st, and you'll be working with our EC2 team.<br><br><span style="color:var(--text-dim)">[Still uses some generic filler paragraphs about company culture. The format is imposed by the AI, not you.]</span></div>
+    </div>
+  </div>
+
+  <div id="tab-v3" class="tab-panel">
+    <div class="prompt-box good" style="margin-bottom:14px">
+      <div class="prompt-label good">Your Prompt (Best — Augment your own draft)</div>
+      <div class="prompt-text"><strong>Hi Cathy,<br><br>Welcome to the team! We are very excited to have you. As we discussed in the interview, the start date is June 1st and the team works out of EC2. Work hours are 8:30am – 4:30pm. We will do a full onboarding and orientation on your first day so you don't need to worry about preparing anything ahead of time.<br><br>Thank you and looking forward to seeing you on June 1st!<br><br>----<br>Here is a welcome email for a new hire. Can you please check it for grammar and tone?</strong></div>
+    </div>
+    <div class="prompt-box good">
+      <div class="prompt-label good">AI Output — ✅ Polished, Your Voice, Right Length</div>
+      <div class="prompt-text">Hi Cathy,<br><br>Welcome aboard! We're thrilled to have you join our team. As we discussed during the interview process, your start date is June 1st, and our team operates out of EC2. Your work hours will be from 8:30 am to 4:30 pm. On your first day, we'll provide a comprehensive onboarding and orientation, so there's no need to prepare anything in advance.<br><br>Feel free to reach out if you have any questions or need assistance before your start date. Looking forward to meeting you in person on June 1st!<br><br>Best regards,</div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:28px">
+    <strong>The lesson:</strong> The V3 approach starts with <em>Create</em> (you write the draft) and ends with <em>Augment</em> (AI polishes it). GenAI tools do best when provided with examples and boundaries — and your voice is preserved. This is also why <strong>sharing use-cases with colleagues accelerates learning</strong> for your entire team.
+  </div>
+
+  <div class="divider"></div>
+  <h2 class="section-title">⚠️ A Warning About Accuracy</h2>
+  <div class="card" style="border-color:rgba(248,113,113,0.3)">
+    <div class="card-body">
+      Asked to generate a chronological list of influential GenAI tools, an AI confidently produced dates — some wrong, some out of order. It listed Claude 3.5 Sonnet (June 2024) after Claude 2 (Jul 2023), but placed Claude 3 (Mar 2024) after Claude 3.5 Sonnet. Models can confabulate plausible-sounding but incorrect information.
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);color:var(--red);font-weight:600">
+        Always verify AI outputs — especially dates, statistics, names, and citations.
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 4: PROMPTING TECHNIQUES
+══════════════════════════════════════════ -->
+<div class="page" id="page-prompting">
+<div class="container">
+  <div class="section-eyebrow">Module 5</div>
+  <h1 class="page-title">Prompting <span>Techniques</span></h1>
+  <p class="page-subtitle">Getting better results from AI tools is a skill. Here are six techniques to use immediately.</p>
+
+  <div id="accordion-prompting">
+    <div class="accordion-item open">
+      <button class="accordion-trigger" onclick="toggleAccordion(this)">
+        <span>1 / 6 — Be Clear, Concise, and Specific</span>
+        <div class="accordion-icon">+</div>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <p style="color:var(--text-muted);margin-bottom:16px;font-size:14px">Vague prompts get vague answers. Use positive instructions rather than negatives. Specify format, length, and audience.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div>
+              <div class="prompt-label bad" style="margin-bottom:6px">❌ Bad</div>
+              <div class="prompt-box bad" style="font-size:13px"><div class="prompt-text">Tell me about climate change.</div></div>
+              <div class="prompt-box bad" style="font-size:13px;margin-top:8px"><div class="prompt-text">Write something about AI.</div></div>
+              <div class="prompt-box bad" style="font-size:13px;margin-top:8px"><div class="prompt-text">Don't make it too long or too technical. Don't use jargon.</div></div>
+            </div>
+            <div>
+              <div class="prompt-label good" style="margin-bottom:6px">✅ Good</div>
+              <div class="prompt-box good" style="font-size:13px"><div class="prompt-text">Summarize the main causes and effects of climate change on coastal cities with recent scientific data.</div></div>
+              <div class="prompt-box good" style="font-size:13px;margin-top:8px"><div class="prompt-text">Write a 150-word blog post explaining how generative AI is being used in university classrooms in 2025.</div></div>
+              <div class="prompt-box good" style="font-size:13px;margin-top:8px"><div class="prompt-text">Create a 10-slide presentation for a general audience on AI basics. Keep language simple, use visuals, and aim for a story-driven flow.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <button class="accordion-trigger" onclick="toggleAccordion(this)">
+        <span>2 / 6 — Providing Examples (Zero / One / Few-Shot)</span>
+        <div class="accordion-icon">+</div>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <div class="card-grid card-grid-3">
+            <div class="card">
+              <div class="badge badge-blue" style="margin-bottom:10px">Zero-Shot</div>
+              <div class="card-title" style="font-size:14px">No examples</div>
+              <div class="card-body">Quick and easy. High reliance on the model's own knowledge. Best for straightforward tasks.</div>
+            </div>
+            <div class="card">
+              <div class="badge badge-gold" style="margin-bottom:10px">One-Shot</div>
+              <div class="card-title" style="font-size:14px">One example</div>
+              <div class="card-body">A bit more effort, but useful for bounding the response type and format. Guides the model with a single reference.</div>
+            </div>
+            <div class="card">
+              <div class="badge badge-green" style="margin-bottom:10px">Few-Shot</div>
+              <div class="card-title" style="font-size:14px">3–5 examples</div>
+              <div class="card-body">Most powerful for complex tasks. Bounds context, format, patterns. Requires quality examples. Best for structured outputs.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <button class="accordion-trigger" onclick="toggleAccordion(this)">
+        <span>3 / 6 — Setting Up Context (Role &amp; Context Prompting)</span>
+        <div class="accordion-icon">+</div>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <p style="color:var(--text-muted);margin-bottom:16px;font-size:14px">Tell the model who it is and what situation it's in. The more context, the more tailored the response.</p>
+          <div class="prompt-box good" style="margin-bottom:10px">
+            <div class="prompt-label good">Role prompting</div>
+            <div class="prompt-text">"You are a helpful writing assistant…" &nbsp;|&nbsp; "You are a senior software developer…" &nbsp;|&nbsp; "You are a travel agent…"</div>
+          </div>
+          <div class="prompt-box good">
+            <div class="prompt-label good">Context prompting</div>
+            <div class="prompt-text"><strong>Context:</strong> You are building a website for the University of Waterloo which will promote an event for international students arriving in September.<br><br>Suggest some design ideas for the landing page layout, keeping accessibility and mobile-first design in mind.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <button class="accordion-trigger" onclick="toggleAccordion(this)">
+        <span>4 / 6 — Step-Back Prompting</span>
+        <div class="accordion-icon">+</div>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <p style="color:var(--text-muted);margin-bottom:16px;font-size:14px">Get the model to answer a general question about your ask first, then feed that context into your specific question.</p>
+          <div class="timeline" style="padding-left:24px">
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-year">Step 1 — Direct attempt (often not optimal)</div>
+              <div class="tl-text"><em>"You are an HR assistant. Give me a job description for a senior web developer based on the following format {attached document}"</em></div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-year">Step 2 — Step back to the general question</div>
+              <div class="tl-text"><em>"What are some of the most important skills that a senior web developer should possess, both technical and non-technical?"</em></div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot active"></div>
+              <div class="tl-year">Step 3 — Use the general answer as context for your specific ask</div>
+              <div class="tl-text"><em>"Context: {response from Step 2, maybe modified}<br>Give me a job description for a senior web developer based on the following format {attached document}"</em></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <button class="accordion-trigger" onclick="toggleAccordion(this)">
+        <span>5 / 6 — Reusable Prompts with Variables</span>
+        <div class="accordion-icon">+</div>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <p style="color:var(--text-muted);margin-bottom:16px;font-size:14px">If you reuse a prompt often with slight changes, define a variables section at the top.</p>
+          <div class="prompt-box good">
+            <div class="prompt-label good">Template</div>
+            <div class="prompt-text">
+              <strong>VARIABLES</strong><br>
+              {project} = "student information system upgrade"<br>
+              {stakeholder} = "faculty administrators"<br><br>
+              <strong>PROMPT</strong><br>
+              You are a senior project manager.<br>
+              Provide a status update for the {project} tailored to {stakeholder}.<br>
+              Highlight current progress, key risks, and upcoming milestones for the {project}.<br>
+              Then recommend communication strategies to keep {stakeholder} engaged and informed throughout the remainder of the {project}.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <button class="accordion-trigger" onclick="toggleAccordion(this)">
+        <span>6 / 6 — Bonus: Prompt Generation &amp; Code</span>
+        <div class="accordion-icon">+</div>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <div class="card-grid card-grid-2">
+            <div class="card">
+              <div class="badge badge-purple" style="margin-bottom:10px">Prompt Generation</div>
+              <div class="card-title" style="font-size:14px">Ask AI to write your prompts</div>
+              <div class="card-body"><em>"I need to generate a new job description for a senior web developer. Give me 10 different prompts I can use with an LLM."</em><br><br><em>"Give me the strengths and drawbacks of these prompts."</em></div>
+            </div>
+            <div class="card">
+              <div class="badge badge-blue" style="margin-bottom:10px">Code</div>
+              <div class="card-title" style="font-size:14px">You don't need to be a developer</div>
+              <div class="card-body"><em>"I have an Excel table with columns: name, count, price. How do I highlight anomalous values?"</em><br><br><em>"I copy a file from a network share every morning. Help me write code to automate this. Now walk me through what I do with it."</em></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:28px">
+    <strong>Key principle:</strong> GenAI tools do well when provided with examples and boundaries (dos and don'ts). Don't just ask — show the model what success looks like.
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 5: TOOLS
+══════════════════════════════════════════ -->
+<div class="page" id="page-tools">
+<div class="container">
+  <div class="section-eyebrow">Module 6</div>
+  <h1 class="page-title">Tools &amp; <span>Selection</span></h1>
+  <p class="page-subtitle">Choosing the right tool matters. Understanding tool types and service models will help you work smarter.</p>
+
+  <h2 class="section-title">Tool Types</h2>
+  <div class="card-grid card-grid-4" style="margin-bottom:36px">
+    <div class="card" style="border-top:3px solid var(--blue)">
+      <div class="badge badge-blue" style="margin-bottom:10px">Assistant</div>
+      <div class="card-body">Simple Q&amp;A — text, images, music, video, code. Answers right away without extended thinking.</div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--gold)">
+      <div class="badge badge-gold" style="margin-bottom:10px">Reasoner</div>
+      <div class="card-body">Complex multi-step thinking. "Think deeper" mode. Deep research. Slower but more accurate for hard problems.</div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--green)">
+      <div class="badge badge-green" style="margin-bottom:10px">Agent</div>
+      <div class="card-body">Any combo of above + ability to act using tools. Can browse the web, run code, read files, send emails.</div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--purple)">
+      <div class="badge badge-purple" style="margin-bottom:10px">AI-Enabled Apps</div>
+      <div class="card-body">Browsers, media generators, specialized productivity tools with AI built in to an existing workflow.</div>
+    </div>
+  </div>
+
+  <h2 class="section-title">Service Types</h2>
+  <div class="card-grid card-grid-3" style="margin-bottom:40px">
+    <div class="card">
+      <div class="card-title" style="font-size:15px">Free SaaS</div>
+      <div class="card-body">Good to get started. Typically restricted in message limits, model access, or features. Good for exploration.</div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="font-size:15px">Paid SaaS</div>
+      <div class="card-body">More advanced features and/or higher capacities. Access to latest models and reasoning modes.</div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="font-size:15px">Open Source</div>
+      <div class="card-body">Free with full control over infrastructure and software. High complexity — requires technical expertise to deploy and maintain.</div>
+    </div>
+  </div>
+
+  <h2 class="section-title">The Main Tools</h2>
+  <div class="card-grid card-grid-2" style="margin-bottom:36px">
+    <div class="tool-card">
+      <div class="tool-icon">🪟</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+        <div class="tool-name">Microsoft Copilot</div>
+        <span class="badge badge-green">✓ UW Approved</span>
+      </div>
+      <div class="tool-desc">office.com/chat · Enterprise data protection applies. University-approved with restricted data support. Auto, Quick response, and Think deeper modes.</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <span class="badge badge-blue">Assistant</span>
+        <span class="badge badge-gold">Reasoner</span>
+        <span class="badge badge-green">Agent</span>
+        <span class="badge badge-gold">Public ✓</span>
+        <span class="badge badge-blue">Restricted ✓</span>
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">💬</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+        <div class="tool-name">OpenAI ChatGPT</div>
+        <span class="badge badge-gold">Public Only</span>
+      </div>
+      <div class="tool-desc">chatgpt.com · Current model: GPT-5.2. Modes: Instant (quick), Thinking (complex), Pro (research-grade). Limits reached on free tier.</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <span class="badge badge-blue">Assistant</span>
+        <span class="badge badge-gold">Reasoner</span>
+        <span class="badge badge-green">Agent</span>
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">✨</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+        <div class="tool-name">Google Gemini</div>
+        <span class="badge badge-gold">Public Only</span>
+      </div>
+      <div class="tool-desc">gemini.google.com · Current model: Gemini 3. Fast, Thinking (complex problems), and Pro (advanced math/code) modes. Multimodal: image and music creation.</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <span class="badge badge-blue">Assistant</span>
+        <span class="badge badge-gold">Reasoner</span>
+        <span class="badge badge-purple">AI-Enabled Apps</span>
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">🤖</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+        <div class="tool-name">Anthropic Claude</div>
+        <span class="badge badge-gold">Public Only</span>
+      </div>
+      <div class="tool-desc">claude.ai · Models: Haiku 4.5 (fastest), Sonnet 4.6 (everyday tasks), Opus 4.6 (most capable). Extended thinking mode available. Currently #1 on agentic benchmarks.</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <span class="badge badge-blue">Assistant</span>
+        <span class="badge badge-gold">Reasoner</span>
+        <span class="badge badge-green">Agent</span>
+      </div>
+    </div>
+    <div class="tool-card" style="grid-column:1/-1">
+      <div class="tool-icon">🦙</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+        <div class="tool-name">Ollama (Open Source)</div>
+        <span class="badge badge-purple">Self-hosted</span>
+      </div>
+      <div class="tool-desc">ollama.com · Run open-source models locally: Qwen3, LLaMA 3.1, Phi4, and many more. Full control — your data never leaves your machine. High technical complexity to set up.</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <span class="badge badge-blue">Assistant</span>
+        <span class="badge badge-gold">Reasoner</span>
+        <span class="badge badge-purple">Open Source</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>UW Policy 46 — Data Classification Reminder:</strong> Public information → any AI system. Confidential/Restricted → University-approved systems only (Copilot). Highly-Restricted (SIN, PHI, credit card) → no AI systems. When in doubt, use Copilot. <br><br>
+    <a href="https://uwaterloo.ca/genai/" target="_blank" style="color:var(--gold)">uwaterloo.ca/genai/</a> &nbsp;·&nbsp; <a href="https://aitools.uwaterloo.ca" target="_blank" style="color:var(--gold)">aitools.uwaterloo.ca</a>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 6: ADOPTION
+══════════════════════════════════════════ -->
+<div class="page" id="page-adoption">
+<div class="container">
+  <div class="section-eyebrow">Module 7</div>
+  <h1 class="page-title">The Adoption <span>Journey</span></h1>
+  <p class="page-subtitle">AI adoption is a people challenge as much as a technology challenge. There's a proven path to an AI-enabled team.</p>
+
+  <div class="card-grid" style="gap:20px">
+
+    <div class="step-card" style="border-top:3px solid var(--blue)">
+      <span class="step-num">01</span>
+      <div class="badge badge-blue" style="margin-bottom:12px">Phase 1</div>
+      <h3 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:8px">Learn</h3>
+      <p style="color:var(--text-muted);font-size:14px;margin-bottom:20px">Foundational AI training + use-case identification. Online courses, personal experimentation, trial and error.</p>
+      <div style="overflow:auto;border-radius:8px;border:1px solid var(--border)">
+        <table class="styled-table" style="margin:0">
+          <thead><tr><th>Roadblock</th><th>Countermeasure</th></tr></thead>
+          <tbody>
+            <tr><td>Lack of interest</td><td>Make it relevant · Leadership &amp; peer engagement · Adoption curve awareness</td></tr>
+            <tr><td>Lack of time</td><td>Empower champions · Protected learning time · Give challenges</td></tr>
+            <tr><td>Fear of making mistakes</td><td>Leadership messaging (experimentation is expected) · Sandbox environments</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="step-card" style="border-top:3px solid var(--gold)">
+      <span class="step-num">02</span>
+      <div class="badge badge-gold" style="margin-bottom:12px">Phase 2</div>
+      <h3 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:8px">Iterate</h3>
+      <p style="color:var(--text-muted);font-size:14px;margin-bottom:20px">Habit forming and use-case scaling. Repeated use leading to refinement. Understanding tool differences and the intersection with automation.</p>
+      <div style="overflow:auto;border-radius:8px;border:1px solid var(--border)">
+        <table class="styled-table" style="margin:0">
+          <thead><tr><th>Roadblock</th><th>Countermeasure</th></tr></thead>
+          <tbody>
+            <tr><td>Productivity ≠ quality</td><td>Definition of done · Spot checks/peer review · Set quality benchmarks</td></tr>
+            <tr><td>Data access concerns</td><td>Green light zones (safe data areas)</td></tr>
+            <tr><td>Tool &amp; integration decisions</td><td>Approved tools list</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="step-card" style="border-top:3px solid var(--green)">
+      <span class="step-num">03</span>
+      <div class="badge badge-green" style="margin-bottom:12px">Phase 3</div>
+      <h3 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:8px">Standardize</h3>
+      <p style="color:var(--text-muted);font-size:14px;margin-bottom:20px">Team transformation with confident AI use — the AI Enabled Team. Usage is habitual, team self-evaluates, adoption of new tools is openly discussed.</p>
+      <div style="overflow:auto;border-radius:8px;border:1px solid var(--border)">
+        <table class="styled-table" style="margin:0">
+          <thead><tr><th>What it looks like</th><th>Key resources</th></tr></thead>
+          <tbody>
+            <tr><td>AI use is a daily habit</td><td><a href="https://uwaterloo.ca/genai/" target="_blank" style="color:var(--gold)">Responsible AI Principles</a></td></tr>
+            <tr><td>Team self-evaluates &amp; iterates</td><td><a href="https://uwaterloo.ca/genai/" target="_blank" style="color:var(--gold)">AI Tools &amp; Data Guidelines</a></td></tr>
+            <tr><td>New tools openly discussed</td><td>Approved tools list + green light zones</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h2 class="section-title">Wrap-Up: Key Principles</h2>
+  <div class="card-grid card-grid-2">
+    <div class="card">
+      <ul class="styled-ul">
+        <li>The tech is accelerating — <strong>nobody is an expert</strong></li>
+        <li>Use-case discovery is <strong>hard work</strong></li>
+        <li>You must make <strong>time for experimentation</strong></li>
+        <li>Share amongst team to <strong>accelerate</strong></li>
+        <li>Define <strong>green light zones</strong> &amp; approved tool lists</li>
+      </ul>
+    </div>
+    <div class="card">
+      <ul class="styled-ul">
+        <li><strong>Leadership must be engaged</strong></li>
+        <li><strong>Empower champions</strong> — find your early adopters</li>
+        <li>Set <strong>definition of done</strong> and quality benchmarks</li>
+        <li>Productivity gains ≠ quality gains — <strong>spot-check outputs</strong></li>
+        <li>Share use-cases — <strong>it's the fastest way to learn</strong></li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 7: AGENTS
+══════════════════════════════════════════ -->
+<div class="page" id="page-agents">
+<div class="container">
+  <div class="section-eyebrow">Module 8</div>
+  <h1 class="page-title">Agents &amp; <span>Automation</span></h1>
+  <p class="page-subtitle">What makes an AI agent different from a chatbot — and what are the risks?</p>
+
+  <h2 class="section-title">From Chatbot to Agent</h2>
+
+  <div class="card" style="margin-bottom:14px">
+    <div style="font-size:13px;color:var(--text-muted);margin-bottom:12px;font-weight:600">CHATBOT — Basic Architecture</div>
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 16px;font-size:13px;font-weight:600">👤 User</div>
+      <div style="color:var(--gold)">⟺</div>
+      <div style="background:var(--surface2);border:1px solid var(--gold);border-radius:8px;padding:10px 16px;font-size:13px;font-weight:600;color:var(--gold)">Website / App</div>
+      <div style="color:var(--gold)">⟺</div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 16px;font-size:13px;font-weight:600">🤖 Model(s)</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:32px;border-color:rgba(245,195,34,0.3)">
+    <div style="font-size:13px;color:var(--gold);margin-bottom:14px;font-weight:700">AGENT — Extended Architecture</div>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 16px;font-size:13px;font-weight:600">👤 User</div>
+      <div style="color:var(--gold)">⟺</div>
+      <div style="background:rgba(245,195,34,0.12);border:2px solid var(--gold);border-radius:8px;padding:14px 18px;font-size:13px;font-weight:700;color:var(--gold)">
+        Website / App / Agent<br>
+        <span style="color:var(--text-muted);font-weight:400;font-size:12px">orchestrates everything below</span>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-left:40px">
+      <div style="background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:10px;font-size:12px;text-align:center">🤖 Model(s)</div>
+      <div style="background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:10px;font-size:12px;text-align:center">🌐 The Internet</div>
+      <div style="background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:10px;font-size:12px;text-align:center">📁 Internal Knowledgebase</div>
+      <div style="background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:10px;font-size:12px;text-align:center">🧠 Memories</div>
+      <div style="background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:10px;font-size:12px;text-align:center">⚙️ Tools / APIs</div>
+    </div>
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);font-size:13px;color:var(--text-muted)">
+      An agent = <strong style="color:var(--text)">Model + Tools + Data + Memory</strong>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-bottom:32px">
+    <strong>Real example:</strong> Curricular overlap analysis using ChatGPT Agent. Given two program curricula, the agent browsed the university's course catalog, compared learning outcomes across courses, identified overlaps, and produced a structured report — all autonomously from a single prompt.
+    <br><a href="https://chatgpt.com/share/e/68dc2400-b1d8-8004-a128-808f845cac82" target="_blank" style="color:var(--gold);font-size:13px;margin-top:6px;display:inline-block">→ View the ChatGPT Agent conversation</a>
+  </div>
+
+  <h2 class="section-title">Risk Areas — Click to reveal mitigations</h2>
+  <div id="risk-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">
+    <div class="risk-card" onclick="toggleRisk(this)">
+      <div class="risk-title">⚠️ Misaligned Goals</div>
+      <div class="risk-desc">Agent optimizes the wrong objective or interprets intent incorrectly.</div>
+      <div class="risk-answer">✅ <strong>Mitigation:</strong> Define clear objectives, constraints, and success criteria before deployment. Be specific about what the agent should <em>not</em> do.</div>
+    </div>
+    <div class="risk-card" onclick="toggleRisk(this)">
+      <div class="risk-title">⚠️ Uncontrolled Actions</div>
+      <div class="risk-desc">Agent takes harmful or unauthorized actions without human approval.</div>
+      <div class="risk-answer">✅ <strong>Mitigation:</strong> Limit permissions and require explicit human approval for high-impact actions. Use sandboxed environments for testing.</div>
+    </div>
+    <div class="risk-card" onclick="toggleRisk(this)">
+      <div class="risk-title">⚠️ Data Privacy &amp; Security</div>
+      <div class="risk-desc">Agent accesses or exposes sensitive information it shouldn't.</div>
+      <div class="risk-answer">✅ <strong>Mitigation:</strong> Apply least-privilege data access principles. Continuous monitoring controls. Never feed restricted data to non-approved systems.</div>
+    </div>
+    <div class="risk-card" onclick="toggleRisk(this)">
+      <div class="risk-title">⚠️ Lack of Accountability</div>
+      <div class="risk-desc">Unclear ownership when the agent causes harm or makes errors.</div>
+      <div class="risk-answer">✅ <strong>Mitigation:</strong> Assign a named business owner, technical owner, and risk owner for every agent in production. Document decisions.</div>
+    </div>
+    <div class="risk-card" onclick="toggleRisk(this)">
+      <div class="risk-title">⚠️ Over-Trust &amp; Reduced Oversight</div>
+      <div class="risk-desc">Overreliance on the agent without sufficient human review or judgment.</div>
+      <div class="risk-answer">✅ <strong>Mitigation:</strong> Design meaningful human review checkpoints. Train users on model limitations. Spot-check outputs regularly even when the system seems reliable.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 8: CHALLENGES
+══════════════════════════════════════════ -->
+<div class="page" id="page-challenges">
+<div class="container">
+  <div class="section-eyebrow">Module 9</div>
+  <h1 class="page-title">Challenges &amp; <span>Data Awareness</span></h1>
+  <p class="page-subtitle">AI tools are exciting — but they come with real responsibilities. Understanding these challenges helps you use AI critically and safely.</p>
+
+  <div class="card-grid card-grid-3" style="margin-bottom:40px">
+    <div class="card" style="border-top:3px solid var(--red)">
+      <div style="font-size:28px;margin-bottom:10px">🎯</div>
+      <div class="card-title">Data &amp; Accuracy</div>
+      <div class="card-body">Models can hallucinate — generating confident-sounding but incorrect information. Training data reflects historical biases. Always verify outputs, especially dates, statistics, and citations.</div>
+      <div style="margin-top:12px;display:flex;gap:6px;flex-wrap:wrap">
+        <span class="badge badge-red">Bias</span>
+        <span class="badge badge-red">Hallucinations</span>
+      </div>
+    </div>
+    <div class="card" style="border-top:3px solid #facc15">
+      <div style="font-size:28px;margin-bottom:10px">©</div>
+      <div class="card-title">Explainability &amp; Copyright</div>
+      <div class="card-body">It's often impossible to explain why a model produced a specific output. Training data may include copyrighted material. AI-generated content raises authorship questions.</div>
+      <div style="margin-top:12px;display:flex;gap:6px;flex-wrap:wrap">
+        <span class="badge" style="background:rgba(250,204,21,0.1);color:#facc15;border:1px solid rgba(250,204,21,0.25)">Accountability</span>
+        <span class="badge" style="background:rgba(250,204,21,0.1);color:#facc15;border:1px solid rgba(250,204,21,0.25)">Value Alignment</span>
+      </div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--green)">
+      <div style="font-size:28px;margin-bottom:10px">🌳</div>
+      <div class="card-title">Resources &amp; Sustainability</div>
+      <div class="card-body">Training and running large models consumes significant energy and water. Cost of inference is falling, but aggregate demand is rising. Sustainability is a growing concern.</div>
+      <div style="margin-top:12px;display:flex;gap:6px;flex-wrap:wrap">
+        <span class="badge badge-green">Cost</span>
+        <span class="badge badge-green">Energy</span>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="section-title">UW Policy 46 — Information Classification</h2>
+  <p class="section-body">An AI-enabled tool is just another information system owned by a vendor. The same data rules apply.</p>
+
+  <div class="card-grid card-grid-3" style="margin-bottom:32px">
+    <div class="policy-col public">
+      <div class="policy-title" style="color:var(--green)">🟢 Public</div>
+      <div style="font-size:12px;color:var(--green);margin-bottom:14px;font-weight:600">Use in ANY AI system ✓</div>
+      <div class="policy-item">University publications</div>
+      <div class="policy-item">Websites without authentication</div>
+      <div class="policy-item">Social media channels</div>
+      <div class="policy-item">University Calendar</div>
+      <div class="policy-item">Published RFPs</div>
+      <div class="policy-item">Salaries under Ontario PSSDA</div>
+    </div>
+    <div class="policy-col restricted">
+      <div class="policy-title" style="color:#facc15">🟡 Restricted / Confidential</div>
+      <div style="font-size:12px;color:#facc15;margin-bottom:14px;font-weight:600">University-approved systems only (Copilot)</div>
+      <div class="policy-item">Personal information (FIPPA/PIPEDA)</div>
+      <div class="policy-item">WatIAM username</div>
+      <div class="policy-item">Student/Employee Number</div>
+      <div class="policy-item">WatCard number</div>
+      <div class="policy-item">IP Address</div>
+      <div class="policy-item">Data that can identify a person when combined</div>
+    </div>
+    <div class="policy-col highly">
+      <div class="policy-title" style="color:var(--red)">🔴 Highly Restricted</div>
+      <div style="font-size:12px;color:var(--red);margin-bottom:14px;font-weight:600">NO AI systems — ever ✗</div>
+      <div class="policy-item">Social Insurance Numbers (SIN)</div>
+      <div class="policy-item">Protected Health Information (PHI)</div>
+      <div class="policy-item">Credit card / financial data</div>
+      <div class="policy-item">Passwords &amp; secrets</div>
+      <div class="policy-item">Legal privilege information</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Remember:</strong> An AI-enabled tool is just another information system owned by a vendor. When uncertain about data classification, default to Copilot for work tasks — it provides enterprise data protection.
+  </div>
+
+  <div class="divider"></div>
+
+  <h2 class="section-title">Resources &amp; Next Steps</h2>
+  <div class="card-grid card-grid-2">
+    <div class="card">
+      <div class="card-title" style="font-size:16px">For Work — Use Microsoft Copilot</div>
+      <div class="card-body" style="margin-bottom:14px">Your university-approved, data-protected tool. Available at office.com/chat.</div>
+      <a class="footer-link" href="https://office.com/chat" target="_blank" style="display:inline-block">office.com/chat →</a>
+    </div>
+    <div class="card">
+      <div class="card-title" style="font-size:16px">Explore &amp; Learn</div>
+      <div class="card-body" style="margin-bottom:14px">Try tools in a safe environment. Take the ITPD courses: Intro to AI &amp; Advanced AI for Everyone.</div>
+      <a class="footer-link" href="https://aitools.uwaterloo.ca" target="_blank" style="display:inline-block;margin-right:6px">aitools.uwaterloo.ca →</a>
+      <a class="footer-link" href="https://uwaterloo.ca/genai/" target="_blank" style="display:inline-block">uwaterloo.ca/genai →</a>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-credit">Pavol Chvala · Director, AI Innovation &amp; Systems Development · IST · pchvala@uwaterloo.ca</span>
+    <div class="footer-links">
+      <a class="footer-link" href="https://hai.stanford.edu/ai-index/2025-ai-index-report" target="_blank">Stanford AI Index</a>
+      <a class="footer-link" href="https://epoch.ai/" target="_blank">Epoch AI</a>
+      <a class="footer-link" href="https://www.kaggle.com/whitepaper-prompt-engineering" target="_blank">Prompt Engineering</a>
+    </div>
+  </div>
+</div>
+</div>
+
+</div><!-- end #pages -->
+
+<script>
+// ─── NAV ───
+const pages = ['home','how','capabilities','usecases','prompting','tools','adoption','agents','challenges'];
+let current = 0;
+
+function goTo(id) {
+  const idx = pages.indexOf(id);
+  if (idx === -1) return;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelector(`[data-page="${id}"]`).classList.add('active');
+  current = idx;
+  window.scrollTo(0, 0);
+  // Trigger bench animation when capabilities page opens
+  if (id === 'capabilities') animateBars();
+}
+
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => goTo(btn.dataset.page));
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') goTo(pages[Math.min(current + 1, pages.length - 1)]);
+  if (e.key === 'ArrowLeft')  goTo(pages[Math.max(current - 1, 0)]);
+});
+
+// ─── ACCORDIONS ───
+function toggleAccordion(trigger) {
+  const item = trigger.closest('.accordion-item');
+  item.classList.toggle('open');
+}
+
+// ─── TABS ───
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const bar = btn.closest('.tab-bar');
+    const tabId = btn.dataset.tab;
+    bar.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    // find tab panels (siblings of the tab bar)
+    const section = bar.parentElement;
+    section.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    section.querySelector('#tab-' + tabId).classList.add('active');
+  });
+});
+
+// ─── RISK CARDS ───
+function toggleRisk(card) {
+  card.classList.toggle('open');
+}
+
+// ─── BENCHMARK BARS ───
+let barsAnimated = false;
+function animateBars() {
+  if (barsAnimated) return;
+  barsAnimated = true;
+  setTimeout(() => {
+    document.querySelectorAll('.bench-bar[data-width]').forEach(bar => {
+      bar.style.width = bar.dataset.width;
+    });
+  }, 200);
+}
+</script>
+</body>
+</html>
