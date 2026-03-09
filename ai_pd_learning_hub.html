@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Learning Hub | University of Waterloo PD Day</title>
+  <style>
+    :root {
+      --bg: #f5f6f8;
+      --surface: #ffffff;
+      --surface-2: #eef1f4;
+      --text: #161616;
+      --muted: #5c6770;
+      --line: #d9dee4;
+      --gold: #f4c542;
+      --gold-deep: #d6a600;
+      --black: #101010;
+      --green: #2f7d4a;
+      --red: #9a2f2f;
+      --blue: #255b9b;
+      --shadow: 0 18px 40px rgba(0,0,0,.08);
+      --radius: 18px;
+      --radius-sm: 12px;
+      --max: 1200px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(180deg, #fcfcfd 0%, #f3f5f8 100%);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    a { color: var(--blue); }
+    .container { width: min(var(--max), calc(100% - 32px)); margin: 0 auto; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.88);
+      border-bottom: 1px solid rgba(217,222,228,.9);
+    }
+
+    .topbar-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      min-height: 68px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: .01em;
+    }
+
+    .crest {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #000 0%, #222 100%);
+      position: relative;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,.12);
+      overflow: hidden;
+    }
+
+    .crest::before,
+    .crest::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+    }
+
+    .crest::before {
+      clip-path: polygon(50% 8%, 88% 24%, 78% 82%, 50% 96%, 22% 82%, 12% 24%);
+      background: #f4c542;
+      inset: 4px;
+    }
+
+    .crest::after {
+      clip-path: polygon(50% 18%, 76% 30%, 70% 76%, 50% 88%, 30% 76%, 24% 30%);
+      background: linear-gradient(180deg, #d9a521 0%, #ffe17f 100%);
+      inset: 8px;
+    }
+
+    .brand small {
+      display: block;
+      font-size: 12px;
+      letter-spacing: .08em;
+      color: var(--muted);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text);
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-size: 14px;
+      border: 1px solid transparent;
+    }
+
+    .nav-links a:hover {
+      background: var(--surface-2);
+      border-color: var(--line);
+    }
+
+    .hero {
+      padding: 54px 0 34px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .hero-card, .panel, .module, .quiz-card, .footer-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 34px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: #544100;
+      background: rgba(244,197,66,.22);
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(214,166,0,.28);
+    }
+
+    h1 {
+      margin: 18px 0 14px;
+      font-size: clamp(2rem, 4vw, 3.6rem);
+      line-height: 1.02;
+      letter-spacing: -.03em;
+    }
+
+    .hero p.lead {
+      margin: 0 0 22px;
+      font-size: 1.08rem;
+      color: #2d3540;
+      max-width: 58ch;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 20px 0 26px;
+    }
+
+    .btn {
+      appearance: none;
+      border: 0;
+      border-radius: 12px;
+      padding: 13px 16px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: linear-gradient(180deg, #181818 0%, #000 100%);
+      color: white;
+      box-shadow: 0 10px 24px rgba(0,0,0,.18);
+    }
+    .btn-secondary {
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+    .btn-gold {
+      background: linear-gradient(180deg, #ffe07a 0%, #f4c542 100%);
+      color: #2c2200;
+      box-shadow: 0 10px 22px rgba(244,197,66,.32);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .stat {
+      background: linear-gradient(180deg, #fffdfa 0%, #fff5d7 100%);
+      border: 1px solid rgba(214,166,0,.25);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.3rem;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+
+    .visual-card {
+      background: radial-gradient(circle at top right, rgba(244,197,66,.35), transparent 40%), linear-gradient(180deg, #101010 0%, #1d1d1d 100%);
+      border-radius: var(--radius);
+      padding: 26px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .hero-diagram {
+      aspect-ratio: 1 / 1;
+      max-width: 430px;
+      margin: 10px auto 24px;
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+
+    .ring {
+      position: absolute;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 50%;
+    }
+
+    .ring.r1 { inset: 8%; }
+    .ring.r2 { inset: 18%; }
+    .ring.r3 { inset: 30%; }
+
+    .node {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 0 8px rgba(244,197,66,.12), 0 0 30px rgba(244,197,66,.25);
+    }
+
+    .node.n1 { top: 16%; left: 28%; }
+    .node.n2 { top: 28%; right: 18%; }
+    .node.n3 { bottom: 21%; left: 20%; }
+    .node.n4 { bottom: 14%; right: 28%; }
+
+    .center-badge {
+      position: relative;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
+      padding: 22px 18px;
+      border-radius: 20px;
+      text-align: center;
+      width: min(280px, 78%);
+      backdrop-filter: blur(6px);
+    }
+
+    .center-badge strong {
+      display: block;
+      font-size: 1.35rem;
+      margin-bottom: 8px;
+    }
+
+    .section {
+      padding: 18px 0 28px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(1.5rem, 2vw, 2.2rem);
+      letter-spacing: -.03em;
+    }
+
+    .section-head p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      max-width: 70ch;
+    }
+
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .module {
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .module h3 {
+      margin: 0;
+      font-size: 1.15rem;
+    }
+
+    .icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(180deg, #fff9e9, #ffefb9);
+      border: 1px solid rgba(214,166,0,.24);
+      font-size: 24px;
+    }
+
+    .chip-row, .pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .chip, .pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 13px;
+      font-weight: 700;
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      color: #34404d;
+    }
+
+    .pill.active, .chip.active {
+      background: rgba(244,197,66,.18);
+      border-color: rgba(214,166,0,.35);
+      color: #5b4500;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .panel { padding: 22px; }
+    .panel h3, .panel h4 { margin-top: 0; }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .tool-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      background: #fbfcfd;
+      min-height: 100%;
+    }
+
+    .tool-card h4 { margin: 0 0 8px; }
+    .tool-card small { color: var(--muted); }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      color: #354150;
+      margin-bottom: 8px;
+    }
+
+    input[type="text"], textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 13px;
+      font: inherit;
+      background: white;
+      color: var(--text);
+      resize: vertical;
+    }
+
+    textarea { min-height: 96px; }
+
+    .output-box {
+      background: #fbfcff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px;
+      min-height: 170px;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .prompt-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .accordion {
+      display: grid;
+      gap: 12px;
+    }
+
+    details {
+      background: #fcfcfd;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 14px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 800;
+      color: #1f2933;
+      list-style: none;
+    }
+
+    summary::-webkit-details-marker { display: none; }
+    details p { margin: 10px 0 0; color: #43505c; }
+
+    .scenario-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .scenario {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px;
+      background: linear-gradient(180deg, #fff 0%, #fbfbfd 100%);
+    }
+
+    .scenario h4 { margin-top: 0; }
+    .reveal {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--line);
+      display: none;
+    }
+
+    .reveal.show { display: block; }
+
+    .journey {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .stage {
+      padding: 18px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    }
+
+    .stage-num {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #111;
+      color: white;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .compare-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .compare-bar > div {
+      border-radius: 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      background: #fcfcfd;
+    }
+
+    .agent-diagram {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      align-items: center;
+      margin-top: 18px;
+    }
+
+    .agent-part {
+      text-align: center;
+      padding: 14px 10px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #fffdf6 0%, #fff 100%);
+    }
+
+    .arrow {
+      text-align: center;
+      color: var(--gold-deep);
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .risk-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .risk {
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #ffffff 0%, #fcfcfd 100%);
+    }
+
+    .risk h4 { margin: 0 0 8px; font-size: 1rem; }
+
+    .highlight {
+      background: linear-gradient(180deg, rgba(244,197,66,.18), rgba(244,197,66,.28));
+      border: 1px solid rgba(214,166,0,.32);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .quiz-card {
+      padding: 24px;
+    }
+
+    .question {
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+      margin-top: 18px;
+    }
+
+    .question:first-child {
+      border-top: 0;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    .options {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .option {
+      display: flex;
+      align-items: start;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #fcfcfd;
+    }
+
+    .result {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 14px;
+      background: #f7f9fb;
+      border: 1px solid var(--line);
+      display: none;
+    }
+
+    .footer {
+      padding: 16px 0 46px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+    }
+
+    .footer-card { padding: 24px; }
+
+    .resource-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .resource {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #fcfcfd;
+    }
+
+    .muted { color: var(--muted); }
+    .tiny { font-size: 12px; }
+    .hidden { display: none !important; }
+
+    @media (max-width: 1100px) {
+      .hero-grid, .grid-2, .footer-grid { grid-template-columns: 1fr; }
+      .module-grid { grid-template-columns: repeat(2, 1fr); }
+      .tool-grid { grid-template-columns: repeat(2, 1fr); }
+      .scenario-grid { grid-template-columns: repeat(2, 1fr); }
+      .journey, .risk-grid { grid-template-columns: repeat(2, 1fr); }
+      .agent-diagram { grid-template-columns: repeat(3, 1fr); }
+      .agent-diagram .arrow { display: none; }
+    }
+
+    @media (max-width: 760px) {
+      .container { width: min(var(--max), calc(100% - 20px)); }
+      .topbar-inner { padding: 10px 0; align-items: start; }
+      .nav-links { display: none; }
+      .stats, .module-grid, .scenario-grid, .tool-grid, .journey, .risk-grid, .form-grid, .compare-bar, .agent-diagram { grid-template-columns: 1fr; }
+      .hero-card, .panel, .module, .quiz-card, .footer-card { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">
+        <div class="crest" aria-hidden="true"></div>
+        <div>
+          <small>University of Waterloo</small>
+          AI Learning Hub
+        </div>
+      </div>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#start">Start</a>
+        <a href="#foundations">Foundations</a>
+        <a href="#tools">Tools</a>
+        <a href="#prompting">Prompting</a>
+        <a href="#safety">Safety</a>
+        <a href="#adoption">Adoption</a>
+        <a href="#agents">Agents</a>
+        <a href="#quiz">Quiz</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="start">
+      <div class="container hero-grid">
+        <div class="hero-card">
+          <span class="eyebrow">Professional development day - AI for work</span>
+          <h1>Learn AI the practical way.</h1>
+          <p class="lead">
+            This interactive site turns the workshop into a self-guided learning experience. It focuses on
+            what AI is, how to choose the right tool, how to prompt effectively, how to work safely with
+            University data, and how teams move toward confident, responsible AI use.
+          </p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#foundations">Start with the essentials</a>
+            <a class="btn btn-secondary" href="#prompting">Jump to prompting practice</a>
+            <a class="btn btn-gold" href="#quiz">Test yourself</a>
+          </div>
+          <div class="stats">
+            <div class="stat">
+              <strong>3 ways to work</strong>
+              Create, augment, and collaborate with AI.
+            </div>
+            <div class="stat">
+              <strong>3 adoption phases</strong>
+              Learn, iterate, and standardize as a team.
+            </div>
+            <div class="stat">
+              <strong>1 key habit</strong>
+              Share practical use-cases with colleagues.
+            </div>
+          </div>
+        </div>
+
+        <div class="visual-card">
+          <div>
+            <div class="eyebrow" style="background: rgba(255,255,255,.08); color: #fff1bc; border-color: rgba(255,255,255,.12);">What this covers</div>
+            <div class="hero-diagram" aria-hidden="true">
+              <div class="ring r1"></div>
+              <div class="ring r2"></div>
+              <div class="ring r3"></div>
+              <div class="node n1"></div>
+              <div class="node n2"></div>
+              <div class="node n3"></div>
+              <div class="node n4"></div>
+              <div class="center-badge">
+                <strong>Model + Context + Judgement</strong>
+                Clear goals, the right tool, and safe data handling matter more than clever wording alone.
+              </div>
+            </div>
+          </div>
+          <div class="highlight" style="background: rgba(255,255,255,.06); color: #fff; border-color: rgba(255,255,255,.12);">
+            <strong>Fastest path to value:</strong>
+            start with a real use-case, provide examples and boundaries, and use AI to improve your draft rather than asking for a perfect first attempt.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="foundations">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>1. Foundations</h2>
+            <p>Understand the basics before chasing tools. The workshop frames AI as something to use critically, practically, and safely.</p>
+          </div>
+        </div>
+
+        <div class="module-grid">
+          <article class="module">
+            <div class="icon-box">🧠</div>
+            <h3>What is AI?</h3>
+            <p><strong>Artificial Intelligence</strong> refers to technology used for learning, problem-solving, decision-making, and language understanding.</p>
+            <p><strong>Generative AI</strong> is a type of AI that can generate original content such as text, images, music, code, and more.</p>
+            <div class="chip-row">
+              <span class="chip">Gen AI</span>
+              <span class="chip">LLM</span>
+              <span class="chip">GPT</span>
+              <span class="chip">Model</span>
+            </div>
+          </article>
+
+          <article class="module">
+            <div class="icon-box">⚙️</div>
+            <h3>How it works</h3>
+            <p>At a high level, generative AI systems learn patterns from huge amounts of data, are tuned to align to human preferences, and then generate outputs by predicting what comes next based on the prompt and context.</p>
+            <div class="compare-bar">
+              <div><strong>1. Training</strong><br><span class="muted">Learn patterns from text, images, video, music, and more.</span></div>
+              <div><strong>2. Preference tuning</strong><br><span class="muted">Shape behaviour to better align with human expectations.</span></div>
+              <div><strong>3. Inference</strong><br><span class="muted">Generate a response to the prompt you provide.</span></div>
+            </div>
+          </article>
+
+          <article class="module">
+            <div class="icon-box">📈</div>
+            <h3>Why it matters now</h3>
+            <p>The materials emphasize that model capabilities are rising, costs have fallen sharply, and agentic systems are improving fast. The practical takeaway: experimentation is increasingly worthwhile, but oversight still matters.</p>
+            <div class="chip-row">
+              <span class="chip">Capabilities rising</span>
+              <span class="chip">Costs falling</span>
+              <span class="chip">Agents improving</span>
+            </div>
+          </article>
+
+          <article class="module">
+            <div class="icon-box">💡</div>
+            <h3>What AI can help with</h3>
+            <p>Examples from the session include knowledgebase assistants, deep research, agents that act on your behalf, legal research automation, adaptive learning platforms, student support agents, tutors, and course design assistants.</p>
+          </article>
+
+          <article class="module">
+            <div class="icon-box">🧭</div>
+            <h3>Three ways to use AI</h3>
+            <p><strong>Create</strong> net-new content. <strong>Augment</strong> content you already have. <strong>Collaborate</strong> to think through decisions, tradeoffs, and options.</p>
+            <div class="pills">
+              <span class="pill active">Create</span>
+              <span class="pill active">Augment</span>
+              <span class="pill active">Collaborate</span>
+            </div>
+          </article>
+
+          <article class="module">
+            <div class="icon-box">👥</div>
+            <h3>Mindset for the day</h3>
+            <p>The content repeatedly comes back to one idea: use-case discovery is hard work, and sharing real examples across colleagues is the fastest way to turn experimentation into practical gains.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="tools">
+      <div class="container grid-2">
+        <div class="panel">
+          <div class="section-head" style="margin-bottom: 10px;">
+            <div>
+              <h2>2. Choosing the right tool</h2>
+              <p>Not every AI tool is the same. Start with the job to be done, the level of reasoning needed, whether action is required, and the sensitivity of the data.</p>
+            </div>
+          </div>
+
+          <div class="tool-grid">
+            <div class="tool-card">
+              <h4>Assistant</h4>
+              <small>Simple Q&amp;A</small>
+              <p>Great for drafting, summarizing, quick questions, image generation, and everyday productivity tasks.</p>
+            </div>
+            <div class="tool-card">
+              <h4>Reasoner</h4>
+              <small>Multi-step thinking</small>
+              <p>Better for harder analysis, tradeoffs, structured planning, and deeper research tasks.</p>
+            </div>
+            <div class="tool-card">
+              <h4>Agent</h4>
+              <small>Can act using tools</small>
+              <p>Useful when the system needs to search, retrieve, transform, and act across multiple systems.</p>
+            </div>
+            <div class="tool-card">
+              <h4>Open source</h4>
+              <small>More control</small>
+              <p>Higher complexity, but helpful when infrastructure control, customization, or local hosting matters.</p>
+            </div>
+          </div>
+
+          <div class="accordion" style="margin-top: 14px;">
+            <details open>
+              <summary>Service types</summary>
+              <p><strong>Free SaaS</strong> is easy to start with but limited. <strong>Paid SaaS</strong> usually offers stronger features or capacity. <strong>Open source</strong> offers control but requires more technical overhead.</p>
+            </details>
+            <details>
+              <summary>Named tools covered in the workshop</summary>
+              <p>Microsoft Copilot, OpenAI ChatGPT, Google Gemini, Anthropic Claude, and Ollama as an open-source path are all covered as examples of how the AI interface layer differs from the underlying models.</p>
+            </details>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3 style="margin-bottom: 8px;">Interactive tool chooser</h3>
+          <p class="muted">Answer three questions and get a recommendation aligned to the workshop's logic.</p>
+          <div class="form-grid">
+            <div>
+              <label for="jobType">What do you need to do?</label>
+              <select id="jobType">
+                <option value="assistant">Quick draft, search, summary, or brainstorm</option>
+                <option value="reasoner">Complex analysis, planning, or deeper reasoning</option>
+                <option value="agent">A system that uses tools or takes actions</option>
+                <option value="open">I need local control or an open-source setup</option>
+              </select>
+            </div>
+            <div>
+              <label for="dataType">What kind of data is involved?</label>
+              <select id="dataType">
+                <option value="public">Public</option>
+                <option value="restricted">Confidential / Restricted</option>
+                <option value="high">Highly Restricted</option>
+              </select>
+            </div>
+            <div style="grid-column: 1 / -1;">
+              <label for="urgency">How much certainty do you need?</label>
+              <select id="urgency">
+                <option value="low">A fast first pass is fine</option>
+                <option value="medium">I need a strong answer with review</option>
+                <option value="high">This is higher stakes and needs careful verification</option>
+              </select>
+            </div>
+          </div>
+          <div class="prompt-actions">
+            <button class="btn btn-primary" id="recommendBtn" type="button">Get recommendation</button>
+          </div>
+          <div class="output-box" id="toolRecommendation">Choose your options and click “Get recommendation.”</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="prompting">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>3. Prompting techniques that actually help</h2>
+            <p>The workshop emphasizes clarity, context, examples, and iteration over magic phrasing. Use AI to strengthen your work, not replace your judgement.</p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <h3>Prompting principles</h3>
+            <div class="accordion">
+              <details open>
+                <summary>Be clear, concise, and specific</summary>
+                <p>Replace vague asks with defined audience, length, tone, and outcome. Specific prompts reduce drift and improve usefulness.</p>
+              </details>
+              <details>
+                <summary>Provide examples</summary>
+                <p>Zero-shot is fastest, one-shot adds guidance, and few-shot prompting helps when you need a pattern, structure, or style to be followed closely.</p>
+              </details>
+              <details>
+                <summary>Set role and context</summary>
+                <p>Tell the model what role to assume and what situation it is operating in. More relevant context usually produces better results.</p>
+              </details>
+              <details>
+                <summary>Use step-back prompting</summary>
+                <p>Ask the model to reason about the broader problem first, then feed that thinking into the specific task you want completed.</p>
+              </details>
+              <details>
+                <summary>Generate prompts and reusable templates</summary>
+                <p>You can ask the model to generate prompt options, compare strengths and drawbacks, and create reusable templates with variables.</p>
+              </details>
+              <details>
+                <summary>Start with your own draft, then augment</summary>
+                <p>One of the strongest lessons in the material is to draft first, then use AI to refine grammar, tone, structure, and concision.</p>
+              </details>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3>Interactive prompt builder</h3>
+            <p class="muted">Build a prompt using the techniques from the session, then copy it into your tool of choice.</p>
+            <div class="chip-row" style="margin-bottom: 12px;">
+              <button class="pill active mode-btn" data-mode="create" type="button">Create</button>
+              <button class="pill mode-btn" data-mode="augment" type="button">Augment</button>
+              <button class="pill mode-btn" data-mode="collaborate" type="button">Collaborate</button>
+            </div>
+            <div class="form-grid">
+              <div>
+                <label for="role">Role</label>
+                <input id="role" type="text" placeholder="e.g., You are a senior project manager" />
+              </div>
+              <div>
+                <label for="audience">Audience or user</label>
+                <input id="audience" type="text" placeholder="e.g., faculty administrators" />
+              </div>
+              <div style="grid-column: 1 / -1;">
+                <label for="context">Context</label>
+                <textarea id="context" placeholder="Describe the situation, background, and any relevant constraints."></textarea>
+              </div>
+              <div style="grid-column: 1 / -1;">
+                <label for="task">Task</label>
+                <textarea id="task" placeholder="What exactly do you want the AI to do?"></textarea>
+              </div>
+              <div>
+                <label for="format">Preferred output format</label>
+                <input id="format" type="text" placeholder="e.g., 5 bullets, a 150-word email, a table" />
+              </div>
+              <div>
+                <label for="constraints">Constraints / boundaries</label>
+                <input id="constraints" type="text" placeholder="e.g., plain language, no jargon, cite assumptions" />
+              </div>
+              <div style="grid-column: 1 / -1;">
+                <label for="examples">Example(s) to follow</label>
+                <textarea id="examples" placeholder="Paste an example, a template, or a pattern to emulate."></textarea>
+              </div>
+            </div>
+            <div class="prompt-actions">
+              <button class="btn btn-primary" id="buildPromptBtn" type="button">Build prompt</button>
+              <button class="btn btn-secondary" id="copyPromptBtn" type="button">Copy prompt</button>
+            </div>
+            <div class="output-box" id="promptOutput">Your generated prompt will appear here.</div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top: 18px;">
+          <div class="panel">
+            <h3>Common use-cases to try</h3>
+            <div class="compare-bar">
+              <div>
+                <strong>Create</strong><br>
+                Draft a vacation request email, explain a concept simply, write a first-pass post, or generate an image and iterate on it.
+              </div>
+              <div>
+                <strong>Augment</strong><br>
+                Summarize meeting notes, improve an email, identify what's missing in a draft, or ask for help with an Excel formula or workflow.
+              </div>
+              <div>
+                <strong>Collaborate</strong><br>
+                Build a business case, analyze a dataset, compare options, or co-think through a decision before you finalize it.
+              </div>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>What the welcome-email example teaches</h3>
+            <p>A vague request produces a generic result. Adding details improves relevance. Starting with your own draft and asking for grammar and tone improvements often produces the strongest outcome because the AI has both your intent and your boundaries.</p>
+            <div class="highlight">
+              <strong>Rule of thumb:</strong>
+              draft first when you can, then use AI to strengthen. Examples and constraints almost always help.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="safety">
+      <div class="container grid-2">
+        <div class="panel">
+          <div class="section-head" style="margin-bottom: 10px;">
+            <div>
+              <h2>4. Safe and responsible use</h2>
+              <p>AI is still just another information system owned by a vendor. The safest way to work is to match the tool to the data classification and keep humans accountable.</p>
+            </div>
+          </div>
+
+          <div class="compare-bar">
+            <div>
+              <strong>Public</strong><br>
+              Public information can be used in any AI system.
+            </div>
+            <div>
+              <strong>Confidential / Restricted</strong><br>
+              Use only University-approved systems such as Copilot.
+            </div>
+            <div>
+              <strong>Highly Restricted</strong><br>
+              Do not enter into any AI system.
+            </div>
+          </div>
+
+          <div class="accordion" style="margin-top: 14px;">
+            <details open>
+              <summary>Examples mentioned in the workshop</summary>
+              <p><strong>Public:</strong> university publications, public websites, social media channels, the university calendar, published RFPs, and salary disclosure data where applicable.</p>
+              <p><strong>Restricted:</strong> personal information, usernames, student or employee numbers, WatCard numbers, IP addresses, and combinations of data that can identify a person.</p>
+              <p><strong>Highly Restricted:</strong> examples given include SIN, PHI, credit card data, and similar highly sensitive information.</p>
+            </details>
+            <details>
+              <summary>Challenges to keep in mind</summary>
+              <p>Hallucinations, bias, data accuracy, explainability, copyright, accountability, value alignment, cost, energy, and sustainability are all listed as live concerns in the session materials.</p>
+            </details>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Data classification practice</h3>
+          <p class="muted">Click each scenario, make a judgement, and then reveal the recommended handling.</p>
+          <div class="scenario-grid">
+            <div class="scenario">
+              <h4>University website copy</h4>
+              <p>You want AI to rewrite public event information for a broader audience.</p>
+              <button class="btn btn-secondary reveal-btn" type="button">Reveal guidance</button>
+              <div class="reveal">
+                <strong>Classification:</strong> Public<br>
+                <strong>Guidance:</strong> Appropriate for any AI system, while still reviewing for accuracy and tone.
+              </div>
+            </div>
+            <div class="scenario">
+              <h4>Meeting notes with names</h4>
+              <p>You want a summary of internal notes that include identifiable staff information.</p>
+              <button class="btn btn-secondary reveal-btn" type="button">Reveal guidance</button>
+              <div class="reveal">
+                <strong>Classification:</strong> Confidential / Restricted<br>
+                <strong>Guidance:</strong> Use only a University-approved system such as Copilot.
+              </div>
+            </div>
+            <div class="scenario">
+              <h4>Credit card receipts</h4>
+              <p>You want AI to extract totals from a folder of reimbursement receipts containing full card numbers.</p>
+              <button class="btn btn-secondary reveal-btn" type="button">Reveal guidance</button>
+              <div class="reveal">
+                <strong>Classification:</strong> Highly Restricted<br>
+                <strong>Guidance:</strong> Do not enter into any AI system.
+              </div>
+            </div>
+            <div class="scenario">
+              <h4>Published RFP</h4>
+              <p>You want AI to identify risks and improve clarity in a request for proposals that is already public.</p>
+              <button class="btn btn-secondary reveal-btn" type="button">Reveal guidance</button>
+              <div class="reveal">
+                <strong>Classification:</strong> Public<br>
+                <strong>Guidance:</strong> Appropriate for any AI system, with normal verification.
+              </div>
+            </div>
+            <div class="scenario">
+              <h4>Student number list</h4>
+              <p>You want AI to sort and classify a spreadsheet that includes student IDs and usernames.</p>
+              <button class="btn btn-secondary reveal-btn" type="button">Reveal guidance</button>
+              <div class="reveal">
+                <strong>Classification:</strong> Confidential / Restricted<br>
+                <strong>Guidance:</strong> Only use in a University-approved system, and consider whether AI is necessary at all.
+              </div>
+            </div>
+            <div class="scenario">
+              <h4>Health accommodation notes</h4>
+              <p>You want AI to summarize medical details included in a student support record.</p>
+              <button class="btn btn-secondary reveal-btn" type="button">Reveal guidance</button>
+              <div class="reveal">
+                <strong>Classification:</strong> Highly Restricted<br>
+                <strong>Guidance:</strong> Do not enter into any AI system.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="adoption">
+      <div class="container grid-2">
+        <div class="panel">
+          <div class="section-head" style="margin-bottom: 10px;">
+            <div>
+              <h2>5. Adoption and trust</h2>
+              <p>The workshop treats AI adoption as a team journey, not just an individual skill. Progress comes from making time, sharing examples, and building guardrails.</p>
+            </div>
+          </div>
+
+          <div class="journey">
+            <div class="stage">
+              <div class="stage-num">1</div>
+              <h3>Learn</h3>
+              <p>Foundational training, personal experimentation, and early use-case discovery.</p>
+              <p class="muted"><strong>Roadblocks:</strong> lack of interest, lack of time, fear of mistakes.</p>
+              <p class="muted"><strong>Countermeasures:</strong> make it relevant, engage leadership and peers, empower champions, provide protected learning time, and create safe sandbox use-cases.</p>
+            </div>
+            <div class="stage">
+              <div class="stage-num">2</div>
+              <h3>Iterate</h3>
+              <p>Repeated use leads to better prompts, clearer patterns, and growing awareness of how AI intersects with automation.</p>
+              <p class="muted"><strong>Roadblocks:</strong> productivity gains without quality gains, uncertain data access, poor tool fit.</p>
+              <p class="muted"><strong>Countermeasures:</strong> define what “done” looks like, use spot checks and peer review, create green-light zones, and maintain approved tool lists.</p>
+            </div>
+            <div class="stage">
+              <div class="stage-num">3</div>
+              <h3>Standardize</h3>
+              <p>Usage becomes habitual and the team evaluates, shares, and improves openly.</p>
+              <p class="muted"><strong>Focus:</strong> responsible AI principles, team norms, data guidance, and continuous improvement.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Self-check: where is your team?</h3>
+          <p class="muted">Choose the option that feels most true right now.</p>
+          <div class="options" id="maturityOptions">
+            <label class="option"><input type="radio" name="maturity" value="learn"> We are mostly curious and still learning basic use-cases.</label>
+            <label class="option"><input type="radio" name="maturity" value="iterate"> We are using AI regularly but inconsistently, and quality varies.</label>
+            <label class="option"><input type="radio" name="maturity" value="standardize"> We have stable habits and now need shared standards, ownership, and governance.</label>
+          </div>
+          <div class="prompt-actions">
+            <button class="btn btn-primary" id="maturityBtn" type="button">Get next-step advice</button>
+          </div>
+          <div class="output-box" id="maturityOutput">Select an option above to get a recommended next move.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="agents">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>6. From chatbots to agents</h2>
+            <p>The advanced material explains that a chatbot is a model plus an interface, while an agent adds tools, data access, and memory so it can complete more complex work.</p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <h3>What makes an agent?</h3>
+            <div class="agent-diagram">
+              <div class="agent-part"><strong>Model</strong><br><span class="muted">Reasoning engine</span></div>
+              <div class="arrow">→</div>
+              <div class="agent-part"><strong>Tools</strong><br><span class="muted">Search, apps, actions</span></div>
+              <div class="arrow">→</div>
+              <div class="agent-part"><strong>Data</strong><br><span class="muted">Internet or internal sources</span></div>
+              <div class="agent-part"><strong>Memory</strong><br><span class="muted">Context over time</span></div>
+              <div class="agent-part"><strong>Interface</strong><br><span class="muted">Website or application layer</span></div>
+            </div>
+            <div class="highlight" style="margin-top: 16px;">
+              <strong>Key distinction:</strong>
+              when a system can retrieve, decide, and act using tools, the risks increase along with the potential value.
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3>Risk areas and responsible principles</h3>
+            <div class="risk-grid">
+              <div class="risk"><h4>Misaligned goals</h4><p>Define clear objectives, constraints, and success criteria.</p></div>
+              <div class="risk"><h4>Uncontrolled actions</h4><p>Limit permissions and require approval for high-impact actions.</p></div>
+              <div class="risk"><h4>Privacy and security</h4><p>Apply least-privilege access and monitoring controls.</p></div>
+              <div class="risk"><h4>Accountability</h4><p>Assign named business, technical, and risk owners.</p></div>
+              <div class="risk"><h4>Over-trust</h4><p>Maintain meaningful human review and train users on limitations.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="quiz">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>7. Quick knowledge check</h2>
+            <p>Use this to see what stuck. The feedback is designed to reinforce the workshop’s core messages.</p>
+          </div>
+        </div>
+
+        <div class="quiz-card">
+          <div class="question" data-answer="b">
+            <strong>1. Which approach usually gives the best results for workplace writing?</strong>
+            <div class="options">
+              <label class="option"><input type="radio" name="q1" value="a"> Ask for a perfect answer with no context.</label>
+              <label class="option"><input type="radio" name="q1" value="b"> Start with a draft or clear boundaries, then iterate with AI.</label>
+              <label class="option"><input type="radio" name="q1" value="c"> Use the same generic prompt every time.</label>
+            </div>
+          </div>
+
+          <div class="question" data-answer="c">
+            <strong>2. Which data should not be entered into any AI system?</strong>
+            <div class="options">
+              <label class="option"><input type="radio" name="q2" value="a"> Public web copy.</label>
+              <label class="option"><input type="radio" name="q2" value="b"> Confidential data in an approved University tool.</label>
+              <label class="option"><input type="radio" name="q2" value="c"> Highly Restricted data.</label>
+            </div>
+          </div>
+
+          <div class="question" data-answer="a">
+            <strong>3. What is step-back prompting?</strong>
+            <div class="options">
+              <label class="option"><input type="radio" name="q3" value="a"> Asking the model a broader question first, then using that context for the specific task.</label>
+              <label class="option"><input type="radio" name="q3" value="b"> Removing all context to avoid bias.</label>
+              <label class="option"><input type="radio" name="q3" value="c"> Asking the AI to answer in fewer words.</label>
+            </div>
+          </div>
+
+          <div class="question" data-answer="b">
+            <strong>4. Which statement best describes an agent?</strong>
+            <div class="options">
+              <label class="option"><input type="radio" name="q4" value="a"> A model that only writes text.</label>
+              <label class="option"><input type="radio" name="q4" value="b"> A system that combines a model with tools, data, memory, and the ability to act.</label>
+              <label class="option"><input type="radio" name="q4" value="c"> A spreadsheet with formulas.</label>
+            </div>
+          </div>
+
+          <div class="question" data-answer="c">
+            <strong>5. In the team adoption journey, what becomes important in the Iterate phase?</strong>
+            <div class="options">
+              <label class="option"><input type="radio" name="q5" value="a"> Avoiding experimentation entirely.</label>
+              <label class="option"><input type="radio" name="q5" value="b"> Removing all human review.</label>
+              <label class="option"><input type="radio" name="q5" value="c"> Defining quality benchmarks, peer review, and green-light zones.</label>
+            </div>
+          </div>
+
+          <div class="question" data-answer="a">
+            <strong>6. What are the three primary ways the workshop frames using AI?</strong>
+            <div class="options">
+              <label class="option"><input type="radio" name="q6" value="a"> Create, augment, collaborate.</label>
+              <label class="option"><input type="radio" name="q6" value="b"> Buy, build, borrow.</label>
+              <label class="option"><input type="radio" name="q6" value="c"> Search, delete, archive.</label>
+            </div>
+          </div>
+
+          <div class="prompt-actions">
+            <button class="btn btn-primary" id="scoreQuizBtn" type="button">Score quiz</button>
+          </div>
+          <div class="result" id="quizResult"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-card">
+        <h3 style="margin-top: 0;">Next steps</h3>
+        <p>Use this site as a refresher after the session. The strongest next move is to identify one real work task, try AI on it safely, then share what worked with your team.</p>
+        <div class="resource-list">
+          <div class="resource">
+            <div>
+              <strong>Microsoft Copilot</strong>
+              <div class="muted tiny">Recommended for work use in the session materials</div>
+            </div>
+            <a href="https://office.com" target="_blank" rel="noopener noreferrer">Open</a>
+          </div>
+          <div class="resource">
+            <div>
+              <strong>UWaterloo AI tools</strong>
+              <div class="muted tiny">Explore University AI resources</div>
+            </div>
+            <a href="https://aitools.uwaterloo.ca" target="_blank" rel="noopener noreferrer">Open</a>
+          </div>
+          <div class="resource">
+            <div>
+              <strong>University Generative AI site</strong>
+              <div class="muted tiny">Guidance and additional information</div>
+            </div>
+            <a href="https://uwaterloo.ca/genai/" target="_blank" rel="noopener noreferrer">Open</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-card">
+        <h3 style="margin-top: 0;">What to remember</h3>
+        <ul>
+          <li>Make the prompt specific, contextual, and bounded.</li>
+          <li>Draft first when possible, then augment with AI.</li>
+          <li>Use the right tool for the task and the data.</li>
+          <li>Experiment, review, refine, and share useful use-cases.</li>
+          <li>As AI becomes more agentic, governance matters more, not less.</li>
+        </ul>
+        <p class="muted tiny">Built as a single-file interactive learning site for workshop participants.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const recommendationEl = document.getElementById('toolRecommendation');
+    document.getElementById('recommendBtn').addEventListener('click', () => {
+      const job = document.getElementById('jobType').value;
+      const data = document.getElementById('dataType').value;
+      const urgency = document.getElementById('urgency').value;
+
+      let result = '';
+
+      if (data === 'high') {
+        result += 'Recommendation: Do not use an AI system for this data.\n\n';
+        result += 'Why: Highly Restricted information should not be entered into any AI system. Strip or anonymize the data first, or solve the problem using a non-AI workflow.';
+        recommendationEl.textContent = result;
+        return;
+      }
+
+      const approvedNote = data === 'restricted'
+        ? 'Because the data is Confidential / Restricted, stay within a University-approved tool such as Copilot.\n\n'
+        : 'Because the data is Public, you have more flexibility in tool choice.\n\n';
+
+      result += approvedNote;
+
+      if (job === 'assistant') {
+        result += 'Best fit: Assistant mode.\n';
+        result += 'Use this for drafting, summarizing, brainstorming, quick search, and first-pass productivity work.\n\n';
+      } else if (job === 'reasoner') {
+        result += 'Best fit: Reasoner mode.\n';
+        result += 'Use this when the task requires multi-step thinking, structured analysis, deeper planning, or tradeoff exploration.\n\n';
+      } else if (job === 'agent') {
+        result += 'Best fit: Agentic workflow.\n';
+        result += 'Use this only when a tool needs to search, retrieve, transform, and act across steps. Add checkpoints and approval for anything high-impact.\n\n';
+      } else {
+        result += 'Best fit: Open-source or locally controlled workflow.\n';
+        result += 'This is appropriate when control, privacy architecture, or customization matters enough to justify more complexity.\n\n';
+      }
+
+      if (urgency === 'high') {
+        result += 'Because this is higher stakes, verify outputs, define what “done” looks like, and keep a human reviewer in the loop.';
+      } else if (urgency === 'medium') {
+        result += 'Use AI to generate a strong draft, then spot-check facts, assumptions, and edge cases before using the output.';
+      } else {
+        result += 'A fast first pass is reasonable here, but treat the result as a starting point rather than the final answer.';
+      }
+
+      recommendationEl.textContent = result;
+    });
+
+    let currentMode = 'create';
+    const modeButtons = [...document.querySelectorAll('.mode-btn')];
+    modeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        modeButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentMode = btn.dataset.mode;
+      });
+    });
+
+    document.getElementById('buildPromptBtn').addEventListener('click', () => {
+      const role = document.getElementById('role').value.trim();
+      const audience = document.getElementById('audience').value.trim();
+      const context = document.getElementById('context').value.trim();
+      const task = document.getElementById('task').value.trim();
+      const format = document.getElementById('format').value.trim();
+      const constraints = document.getElementById('constraints').value.trim();
+      const examples = document.getElementById('examples').value.trim();
+
+      const defaults = {
+        create: 'Generate new content from scratch while staying within the requested boundaries.',
+        augment: 'Improve, refine, or ground the existing material I provide without inventing missing facts.',
+        collaborate: 'Help me think through options, tradeoffs, and recommendations before I decide.'
+      };
+
+      const sections = [];
+      sections.push((role || 'You are a helpful assistant.') + (audience ? ` Your audience is ${audience}.` : ''));
+      sections.push(`Mode: ${currentMode.charAt(0).toUpperCase() + currentMode.slice(1)}. ${defaults[currentMode]}`);
+      if (context) sections.push(`Context:\n${context}`);
+      if (task) sections.push(`Task:\n${task}`);
+      if (format) sections.push(`Output format:\n${format}`);
+      if (constraints) sections.push(`Constraints:\n${constraints}`);
+      if (examples) sections.push(`Example(s) to follow:\n${examples}`);
+      sections.push('Before answering, identify any ambiguity or missing information you are assuming.');
+
+      document.getElementById('promptOutput').textContent = sections.join('\n\n');
+    });
+
+    document.getElementById('copyPromptBtn').addEventListener('click', async () => {
+      const text = document.getElementById('promptOutput').textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        const original = document.getElementById('copyPromptBtn').textContent;
+        document.getElementById('copyPromptBtn').textContent = 'Copied';
+        setTimeout(() => document.getElementById('copyPromptBtn').textContent = original, 1400);
+      } catch (e) {
+        alert('Copy failed. You can still select and copy the prompt manually.');
+      }
+    });
+
+    document.querySelectorAll('.reveal-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const reveal = btn.nextElementSibling;
+        reveal.classList.toggle('show');
+        btn.textContent = reveal.classList.contains('show') ? 'Hide guidance' : 'Reveal guidance';
+      });
+    });
+
+    document.getElementById('maturityBtn').addEventListener('click', () => {
+      const selected = document.querySelector('input[name="maturity"]:checked');
+      const out = document.getElementById('maturityOutput');
+      if (!selected) {
+        out.textContent = 'Select the statement that best matches your team first.';
+        return;
+      }
+
+      const messages = {
+        learn: 'Your next best move: identify 2-3 relevant use-cases, give people protected time to experiment, and make leadership support visible. Keep it practical and low-risk.',
+        iterate: 'Your next best move: define quality benchmarks, set peer-review habits, clarify which tools and data are approved, and share examples that show what “good” looks like.',
+        standardize: 'Your next best move: formalize responsible AI principles, assign ownership for higher-risk workflows, maintain approved tool lists, and encourage ongoing team reflection and improvement.'
+      };
+      out.textContent = messages[selected.value];
+    });
+
+    document.getElementById('scoreQuizBtn').addEventListener('click', () => {
+      const questions = [...document.querySelectorAll('.question')];
+      let score = 0;
+      let answered = 0;
+
+      questions.forEach((q, i) => {
+        const selected = q.querySelector('input:checked');
+        if (selected) answered += 1;
+        if (selected && selected.value === q.dataset.answer) score += 1;
+      });
+
+      const result = document.getElementById('quizResult');
+      result.style.display = 'block';
+
+      if (answered < questions.length) {
+        result.innerHTML = `<strong>You answered ${answered} of ${questions.length} questions.</strong><br>Finish the rest for a full score.`;
+        return;
+      }
+
+      let feedback = '';
+      if (score === questions.length) {
+        feedback = 'Excellent. You have a strong grasp of the core ideas: prompting with context, matching tool to task, handling data safely, and keeping humans accountable.';
+      } else if (score >= 4) {
+        feedback = 'Good foundation. Revisit the sections on safe data handling, adoption stages, and agent risks to sharpen your judgement.';
+      } else {
+        feedback = 'You have the basics started. Go back through Foundations, Prompting, and Safety, then take the quiz again.';
+      }
+
+      result.innerHTML = `<strong>Your score: ${score} / ${questions.length}</strong><br>${feedback}`;
+    });
+  </script>
+</body>
+</html>
