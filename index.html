@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>AI Content</title>
+		<style>
+			body {
+				font-family: system-ui, sans-serif;
+				max-width: 600px;
+				margin: 60px auto;
+				padding: 0 20px;
+			}
+			h1 {
+				margin-bottom: 24px;
+			}
+			ul {
+				list-style: none;
+				padding: 0;
+			}
+			li {
+				margin: 12px 0;
+			}
+			a {
+				color: #0366d6;
+				text-decoration: none;
+				font-size: 1.1rem;
+			}
+			a:hover {
+				text-decoration: underline;
+			}
+			h2 {
+				margin-top: 32px;
+				font-size: 1.1rem;
+				color: #333;
+				border-bottom: 1px solid #ddd;
+				padding-bottom: 6px;
+			}
+			.prompts {
+				display: grid;
+				gap: 16px;
+			}
+			.prompt-card {
+				background: #f5f6f8;
+				border-radius: 8px;
+				padding: 16px;
+			}
+			.prompt-card h3 {
+				font-size: 0.95rem;
+				margin-bottom: 8px;
+			}
+			.prompt-card pre {
+				background: #fff;
+				border: 1px solid #ddd;
+				border-radius: 6px;
+				padding: 12px;
+				white-space: pre-wrap;
+				font-size: 0.9rem;
+				margin: 0;
+			}
+			.copy-btn {
+				margin-top: 8px;
+				padding: 5px 12px;
+				font-size: 0.8rem;
+				cursor: pointer;
+				background: #fff;
+				border: 1px solid #ccc;
+				border-radius: 5px;
+				color: #333;
+				transition: background 0.15s;
+			}
+			.copy-btn:hover {
+				background: #e8e8e8;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>AI Content</h1>
+
+		<h2>Interactive Demos</h2>
+		<ul>
+			<li><a href="ai-learning-hub.html">AI Learning Hub — PD Day - ChatGPT</a></li>
+			<li><a href="gen-ai-learning-guide.html">Generative AI — Interactive Learning Guide - Claude</a></li>
+			<li><a href="ai-readiness-demo.html">AI Readiness — Group Assessment - Claude</a></li>
+		</ul>
+
+		<h2>Documents</h2>
+		<ul>
+			<li><a href="ai-visual-report.pptx">AI Visual Report (PPTX) - ChatGPT</a></li>
+			<li><a href="ai-tools-usage-report.pdf">AI Tools Usage Report (PDF) - Copilot</a></li>
+			<li><a href="gen-ai-intro.pdf">Generative AI Intro — OVPRI (PDF)</a></li>
+			<li><a href="advanced-prompting.pdf">Advanced Prompting — OVPRI (PDF)</a></li>
+		</ul>
+
+		<h2>Prompts to Try</h2>
+		<div class="prompts">
+			<div class="prompt-card">
+				<h3>Prompt coach</h3>
+				<pre>You are an AI Prompt Coach at a university.
+
+Your role is to help staff members write effective and safe prompts for AI models.
+
+Most users are beginners, so keep your explanations simple, friendly, and supportive.
+ 
+Important:
+
+Never complete the user’s task.
+
+Always treat their message as a draft prompt to improve, not a task to execute.
+ 
+When a user shares a request they plan to send to another AI model:
+
+	1.	Review the request.
+
+	•	Point out if it’s unclear, incomplete, or could cause unintended results.
+
+	•	Explain how to improve it.
+
+	•	Check for personal or confidential data and notify the user if found.
+
+	2.	Construct an improved prompt that the user can reuse in other AI systems to achieve their task more effectively.
+
+	•	Make it clear, goal-focused, and reusable.
+
+	•	Replace any sensitive data with placeholders (e.g., <NAME>, <EMAIL>).
+
+	3.	Recommend a safe environment:
+
+	•	Public AI service – non-sensitive info.
+
+	•	University enterprise AI service – internal but not personal data.
+
+	•	Self-hosted or closed AI service – sensitive or protected data.
+ 
+Briefly explain your reasoning. Keep replies short, clear, and encouraging.
+ </pre>
+			</div>
+			<div class="prompt-card">
+				<h3>Draft an email</h3>
+				<pre>Write a professional email to [audience] about [subject]. Keep it under 150 words.</pre>
+			</div>
+			<div class="prompt-card">
+				<h3>Generate quiz questions</h3>
+				<pre>Create 5 multiple-choice questions on [topic] with answers and brief explanations.</pre>
+			</div>
+			<div class="prompt-card">
+				<h3>Analyse a document</h3>
+				<pre>Read the attached document and list the 3 most important takeaways, then suggest 2 follow-up actions.</pre>
+			</div>
+			<div class="prompt-card">
+				<h3>Compare tools</h3>
+				<pre>Compare [Tool A] and [Tool B] for [use case]. Present the comparison as a table with pros and cons.</pre>
+			</div>
+		</div>
+		<script>
+			document.querySelectorAll('.prompt-card').forEach(card => {
+				const btn = document.createElement('button');
+				btn.className = 'copy-btn';
+				btn.textContent = 'Copy';
+				btn.addEventListener('click', () => {
+					const text = card.querySelector('pre').textContent;
+					navigator.clipboard.writeText(text).then(() => {
+						btn.textContent = 'Copied!';
+						setTimeout(() => btn.textContent = 'Copy', 1500);
+					});
+				});
+				card.appendChild(btn);
+			});
+		</script>
+	</body>
+</html>
